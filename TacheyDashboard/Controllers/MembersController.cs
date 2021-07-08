@@ -10,13 +10,16 @@ namespace TacheyDashboard.Controllers
 {
     public class MembersController : Controller
     {
-        public MembersController()
+        private readonly TacheyContext _context;
+
+        public MembersController(TacheyContext context)
         {
+            _context = context;
         }
 
         public IActionResult Member()
         {
-            return View();
+            return View(_context.AspNetUsers);
         }
     }
 }
