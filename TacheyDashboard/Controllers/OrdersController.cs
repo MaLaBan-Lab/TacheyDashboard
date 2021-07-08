@@ -8,6 +8,9 @@ namespace TacheyDashboard.Controllers
 {
     public class OrdersController : Controller
     {
+        public OrdersController()
+        {
+        }
         public IActionResult Point()
         {
             return View();

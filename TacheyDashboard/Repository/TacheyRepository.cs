@@ -4,16 +4,26 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
+using TacheyDashboard.Models;
 
 namespace Tachey001.Repository
 {
     public class TacheyRepository
     {
         private DbContext _context;
+
+        public TacheyContext TacheyContext { get; }
+
         public TacheyRepository(DbContext context)
         {
             _context = context;
         }
+
+        public TacheyRepository(TacheyContext tacheyContext)
+        {
+            TacheyContext = tacheyContext;
+        }
+
         public void Create<T>(T value) where T : class
         {
             _context.Entry(value).State = EntityState.Added;
