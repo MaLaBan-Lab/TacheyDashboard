@@ -9,7 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Tachey001.Repository;
 using TacheyDashboard.Models;
+using TacheyDashboard.Service;
 
 namespace TacheyDashboard
 {  
@@ -28,6 +30,9 @@ namespace TacheyDashboard
             services.AddControllersWithViews();
             services.AddDbContext<TacheyContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("TacheyContext")));
+
+            services.AddScoped<TacheyRepository>();
+            services.AddScoped<HomeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
