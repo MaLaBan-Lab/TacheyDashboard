@@ -1,7 +1,190 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<Course>
+
 @{
+    ViewData["Title"] = "Product";
+}
+@section topCss{
+    <!-- Load required Bootstrap and BootstrapVue CSS -->
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+
+    <style>
+        pre{
+            font-size:18px;
+        }
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+}
+@section topJs{
+    <!-- Load polyfills to support older browsers -->
+    <script src="//polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver"
+            crossorigin="anonymous"></script>
+
+    <!-- Load Vue followed by BootstrapVue -->
+    <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+
+    <!-- Load the following for BootstrapVueIcons support -->
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
 }
 
-<h1>Product</h1>
+<h1>課程管理</h1>
+
+<div id="app" v-cloak>
+    <b-container fluid>
+        <!-- User Interface controls -->
+        <b-row>
+            <b-col sm="5" md="6" class="my-1">
+                <b-form-group label="每頁顯示" label-for="per-page-select" label-cols-sm="6" label-cols-md="4"
+                              label-cols-lg="3" label-align-sm="right" label-size="sm" class="mb-0">
+                    <b-form-select id="per-page-select" v-model="perPage" :options="pageOptions" size="sm">
+                    </b-form-select>
+                </b-form-group>
+            </b-col>
+
+            <b-col sm="7" md="6" class="my-1">
+                <b-pagination v-model="currentPage" :total-rows="totalRows" :per-page="perPage" align="fill"
+                              size="sm" class="my-0"></b-pagination>
+            </b-col>
+        </b-row>
+
+        <!-- Main table element -->
+        <b-table :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter"
+                 :filter-included-fields="filterOn" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"
+                 :sort-direction="sortDirection" stacked="md" show-empty small  v-on:filtered="onFiltered">
+
+            <template #cell(actions)="row">
+                <b-button size="sm" v-on:click="info(row.item, row.index, $event.target)" class="m-1">
+                    審核課程
+                </b-button>
+                <b-button size="sm" v-on:click="row.toggleDetails" variant="success" class="m-1">
+                    {{ row.detailsShowing ? '隱藏資訊' : ' 顯示資訊' }}
+                </b-button>
+            </template>
+
+            <template #row-details="row">
+                <b-card>
+                    <ul>
+                        <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
+                    </ul>
+                </b-card>
+               
+            </template>
+        </b-table>
+
+        <!-- Info modal -->
+        <b-modal :id="infoModal.id" size="xl" :title="infoModal.title" ok-only v-on:hide="resetInfoModal" scrollable >
+            <div class="container">
+                <pre class="">{{ infoModal.content }}</pre>
+            </div>
+            
+            <template #modal-footer>
+                <div class="w-100">
+                    <p class="float-left">請仔細審視內容</p>
+                    <b-button variant="danger"
+                              size="sm"
+                              class="float-right m-1">
+                        不通過
+                    </b-button>
+                    <b-button variant="success"
+                              size="sm"
+                              class="float-right m-1">
+                        通過
+                    </b-button>
+                </div>
+            </template>
+        </b-modal>
+    </b-container>
+</div>
+
+@section endJs{
+    <script>
+        var source = @Html.Raw(ViewBag.Labels);
+
+        let app = new Vue({
+            el: '#app',
+            data: {
+                items: source,
+                fields: [
+                    { key: 'CourseId', label: '課程Id', sortable: false, class: "col-2"},
+                    { key: 'Title', label: '課程標題', sortable: false, class: "col-1"},
+                    { key: 'OriginalPrice', label: '原價', sortable: true, sortDirection: 'desc', class: "col-1" },
+                    { key: 'TotalMinTime', label: '長度', sortable: true, sortDirection: 'desc', class: "col-1"},
+                    { key: 'MemberId', label: '開課會員Id', sortable: false, class: "col-2"},
+                    { key: 'CategoryId', label: '類別', sortable: true, sortDirection: 'desc', class: "col-1"},
+                    { key: 'CategoryDetailsId', label: '細項', sortable: true, sortDirection: 'desc' },
+                    { key: 'CreateDate', label: '開課日期', sortable: true, sortDirection: 'desc', class: "col-1"},
+                    { key: 'MainClick', label: '點擊數', sortable: true, sortDirection: 'desc', class: "col-1"},
+                    { key: 'actions', label: '', sortable: false }
+                ],
+                totalRows: 1,
+                currentPage: 1,
+                perPage: 10,
+                pageOptions: [10, 30 ,50, 150, { value: 1000, text: "Show a lot" }],
+                sortBy: '',
+                sortDesc: false,
+                sortDirection: 'asc',
+                filter: null,
+                filterOn: [],
+                infoModal: {
+                    id: 'info-modal',
+                    title: '',
+                    content: ''
+                }
+            },
+            computed: {
+                sortOptions() {
+                    // Create an options list from our fields
+                    return this.fields
+                        .filter(f => f.sortable)
+                        .map(f => {
+                            return { text: f.label, value: f.key }
+                        })
+                }
+            },
+            mounted() {
+                // Set the initial number of items
+                this.totalRows = this.items.length
+            },
+            methods: {
+                info(item, index, button) {
+                    this.infoModal.title = `${item.CourseId} - ${item.Title}`
+                    this.infoModal.content =
+                        `
+                        課程Id :${item.CourseId}
+                        課程標題 :${item.Title}
+                        內容描述 :${item.Description}
+                        封面圖片網址 :${item.TitlePageImageUrl}
+                        行銷照片網址 :${item.MarketingImageUrl}
+                        上課工具(軟體，材料) :${item.Tool}
+                        課程適合的門檻 :${item.CourseLevel}
+                        學習成效 :${item.Effect}
+                        適合的族群 :${item.CoursePerson}
+                        定價 :${item.OriginalPrice}
+                        課程總長度 :${item.TotalMinTime}
+                        介紹 :${item.Introduction}
+                        開課會員編號 :${item.MemberId}
+                        開課會員身份 :${item.LecturerIdentity}
+                        分類編號 :${item.CategoryId}
+                        細項編號 :${item.CategoryDetailsId}
+                        審核狀態 :${item.CreateVerify}
+                        預覽影片 :${item.PreviewVideo}
+                        課製化網址 :${item.CustomUrl}`
+                                             
+                    this.$root.$emit('bv::show::modal', this.infoModal.id, button)
+                },
+                resetInfoModal() {
+                    this.infoModal.title = ''
+                    this.infoModal.content = ''
+                },
+                onFiltered(filteredItems) {
+                    // Trigger pagination to update the number of buttons/pages due to filtering
+                    this.totalRows = filteredItems.length
+                    this.currentPage = 1
+                }
+            }
+        });
+    </script>
+}

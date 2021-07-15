@@ -1,0 +1,184 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<TacheyDashboard.Models.Course>
+
+@{
+    ViewData["Title"] = "Product";
+}
+
+<h1>課程管理</h1>
+
+@*<p>
+        <a asp-action="Create">Create New</a>
+    </p>*@
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("課程Id")
+            </th>
+            <th>
+                @Html.DisplayName("課程標題")
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TitlePageImageUrl)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MarketingImageUrl)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tool)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CourseLevel)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Effect)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CoursePerson)
+                </th>*@
+            <th>
+                @Html.DisplayName("原價")
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.PreOrderPrice)
+                </th>*@
+            <th>
+                @Html.DisplayName("課程長度")
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Introduction)
+                </th>*@
+            <th>
+                @Html.DisplayName("開課會員Id")
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LecturerIdentity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryId)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.CategoryDetailsId)
+                </th>*@
+            <th>
+                @Html.DisplayName("開課日期")
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.CreateFinish)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreateVerify)
+                </th>*@
+            @*<th>
+                    @Html.DisplayNameFor(model => model.PreviewVideo)
+                </th>*@
+            @*<th>
+                    @Html.DisplayNameFor(model => model.CustomUrl)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.MainClick)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomClick)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TitlePageImageUrl)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MarketingImageUrl)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tool)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CourseLevel)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Effect)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CoursePerson)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.OriginalPrice)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.PreOrderPrice)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalMinTime)
+                    @if (item.TotalMinTime != null)
+                    {
+                        <span>分鐘</span>
+                    }
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Introduction)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.MemberId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LecturerIdentity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryId)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.CategoryDetailsId)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreateDate)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.CreateFinish)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreateVerify)
+                    </td>*@
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.PreviewVideo)
+                    </td>*@
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.CustomUrl)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.MainClick)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomClick)
+                </td>
+                <td>
+                    @Html.ActionLink("檢視", "Details", new { courseId = item.CourseId }, new { @class = "btn btn-primary" })
+
+                    @Html.ActionLink("編輯", "Edit", new { courseId = item.CourseId }, new { @class = "btn btn-success" })
+                    @Html.ActionLink("刪除", "", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-danger" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

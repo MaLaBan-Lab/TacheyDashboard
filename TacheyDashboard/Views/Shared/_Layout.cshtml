@@ -10,6 +10,9 @@
     <link href="~/css/styles.css" rel="stylesheet" />
     @*@Styles.Render("~/Assets/css/styles.css")*@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+
+    @RenderSection("topCss", required: false)
+    @RenderSection("topJs", required: false)
 </head>
 <body>
     <header class="sb-nav-fixed">
@@ -149,5 +152,7 @@
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
     <script src="~/js/datatables-simple-demo.js"></script>
     @RenderSection("Scripts", required: false)
+    @RenderSection("endCss", required: false)
+    @RenderSection("endJs", required: false)
 </body>
 </html>
