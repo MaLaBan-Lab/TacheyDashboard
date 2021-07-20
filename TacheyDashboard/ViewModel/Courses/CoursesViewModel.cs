@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TacheyDashboard.Models;
 
-namespace TacheyDashboard.ViewModel.Course
+namespace TacheyDashboard.ViewModel.Courses
 {
-    public class CourseViewModel
+    public class CoursesViewModel
     {
         public string CourseId { get; set; }
         public string Title { get; set; }
@@ -25,6 +26,8 @@ namespace TacheyDashboard.ViewModel.Course
         public int? CategoryId { get; set; }
         public string CategoryName { get; set; }
         public int? CategoryDetailsId { get; set; }
+        public int? DetailID { get; set; }
+        public string DetailName { get; set; }
         public DateTime? CreateDate { get; set; }
         public bool? CreateFinish { get; set; }
         public bool? CreateVerify { get; set; }
@@ -32,11 +35,8 @@ namespace TacheyDashboard.ViewModel.Course
         public string CustomUrl { get; set; }
         public int? MainClick { get; set; }
         public int? CustomClick { get; set; }
-        public int ChapterId { get; set; }
-        public string ChapterName { get; set; }
-        public string UnitId { get; set; }
-        public string UnitName { get; set; }
-        public string CourseUrl { get; set; }
         public string Ps { get; set; }
+        public IEnumerable<CourseChapter> courseChapters { get; set; }
+        public IEnumerable<CourseUnit> courseUnits { get; set; }
     }
 }

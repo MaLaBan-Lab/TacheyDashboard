@@ -32,6 +32,7 @@ namespace TacheyDashboard
                 options.UseSqlServer(Configuration.GetConnectionString("TacheyContext")));
 
             services.AddScoped<TacheyRepository>();
+            services.AddScoped<CoursesService>();
             services.AddScoped<HomeService>();
         }
 

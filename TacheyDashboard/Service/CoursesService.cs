@@ -4,32 +4,34 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tachey001.Repository;
 using TacheyDashboard.Models;
-using TacheyDashboard.ViewModel.Course;
+using TacheyDashboard.ViewModel.Courses;
 
 namespace TacheyDashboard.Service
 {
     public class CoursesService
     {
-        private readonly TacheyContext _context;
-
-        private TacheyRepository _tacheyRepository;
         //初始化資料庫邏輯
-        public CoursesService()
+        private TacheyRepository _tacheyRepository;
+        public CoursesService(TacheyRepository tacheyRepository)
         {
-            _tacheyRepository = new TacheyRepository(new TacheyContext());
-
-            _context = new TacheyContext();
+            _tacheyRepository = tacheyRepository;
         }
-
-        public List<CourseViewModel> GetAllCourse()
+        public List<CoursesViewModel> GetAllCourseProduct()
         {
-            var getcourses = _context.Courses;
-            var category = _context.CourseCategories;
-            var chapter = _context.CourseChapters;
-            var unit = _context.CourseUnits;
+            var course = _tacheyRepository.GetAll<Course>();
 
-            var result = from c in getcourses
-                         select new CourseViewModel
+            var category = _tacheyRepository.GetAll<CourseCategory>();
+
+            var detail = _tacheyRepository.GetAll<CategoryDetail>();
+
+            var chapter = _tacheyRepository.GetAll<CourseChapter>();
+
+            var unit = _tacheyRepository.GetAll<CourseUnit>();
+
+            var result = from c in course
+                         join cat in category on c.CategoryId equals cat.CategoryId
+                         join det in detail on c.CategoryDetailsId equals det.DetailId
+                         select new CoursesViewModel
                          {
                              CourseId = c.CourseId,
                              Title = c.Title,
@@ -47,7 +49,9 @@ namespace TacheyDashboard.Service
                              MemberId = c.MemberId,
                              LecturerIdentity = c.LecturerIdentity,
                              CategoryId = c.CategoryId,
-                             CategoryDetailsId = c.CategoryDetailsId,
+                             CategoryName = cat.CategoryName,
+                             DetailID = c.CategoryDetailsId,
+                             DetailName = det.DetailName,
                              CreateDate = c.CreateDate,
                              CreateFinish = c.CreateFinish,
                              CreateVerify = c.CreateVerify,
@@ -55,56 +59,21 @@ namespace TacheyDashboard.Service
                              CustomUrl = c.CustomUrl,
                              MainClick = c.MainClick,
                              CustomClick = c.CustomClick,
+                             courseChapters = chapter.Where(x => x.CourseId == c.CourseId).ToList(),
+                             courseUnits = unit.Where(x => x.CourseId == c.CourseId).ToList()
                          };
 
             return result.ToList();
         }
 
-        //public List<CourseViewModel> GetAllCourseProduct()
-        //{
-        //    var course = _tacheyRepository.GetAll<Course>();
-        //    var category = _tacheyRepository.GetAll<CourseCategory>();
-        //    var chapter = _tacheyRepository.GetAll<CourseChapter>();
-        //    var unit = _tacheyRepository.GetAll<CourseUnit>();
-        //    var result = from c in course
-        //                 join cat in category on c.CategoryId equals cat.CategoryId
-        //                 join ch in chapter on c.CourseId equals ch.CourseId
-        //                 join u in unit on c.CourseId equals u.CourseId
-        //                 select new CourseViewModel
-        //                 {
-        //                     CourseId = c.CourseId,
-        //                     Title = c.Title,
-        //                     Description = c.Description,
-        //                     TitlePageImageUrl = c.TitlePageImageUrl,
-        //                     MarketingImageUrl = c.MarketingImageUrl,
-        //                     Tool = c.Tool,
-        //                     CourseLevel = c.CourseLevel,
-        //                     Effect = c.Effect,
-        //                     CoursePerson = c.CoursePerson,
-        //                     OriginalPrice = c.OriginalPrice,
-        //                     PreOrderPrice = c.PreOrderPrice,
-        //                     TotalMinTime = c.TotalMinTime,
-        //                     Introduction = c.Introduction,
-        //                     MemberId = c.MemberId,
-        //                     LecturerIdentity = c.LecturerIdentity,
-        //                     CategoryId = c.CategoryId,
-        //                     CategoryName = cat.CategoryName,
-        //                     CategoryDetailsId = c.CategoryDetailsId,
-        //                     CreateDate = c.CreateDate,
-        //                     CreateFinish = c.CreateFinish,
-        //                     CreateVerify = c.CreateVerify,
-        //                     PreviewVideo = c.PreviewVideo,
-        //                     CustomUrl = c.CustomUrl,
-        //                     MainClick = c.MainClick,
-        //                     CustomClick = c.CustomClick,
-        //                     ChapterId = ch.ChapterId,
-        //                     ChapterName = ch.ChapterName,
-        //                     UnitId = u.UnitId,
-        //                     UnitName = u.UnitName,
-        //                     CourseUrl = u.CourseUrl
-        //                 };
+        public void UpdateStepCreateVerify(bool? CreateVerify,string CourseId)
+        {
+            var result = _tacheyRepository.Get<Course>(x => x.CourseId == CourseId);
 
-        //    return result.ToList();
-        //}
+            result.CreateVerify = CreateVerify;
+
+            _tacheyRepository.SaveChanges();
+        }
+
     }
 }
