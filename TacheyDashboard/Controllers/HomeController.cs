@@ -17,7 +17,7 @@ using TacheyDashboard.ViewModel.Members;
 
 namespace TacheyDashboard.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

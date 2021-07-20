@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TacheyDashboard.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class OrdersController : Controller
     {
         public OrdersController()

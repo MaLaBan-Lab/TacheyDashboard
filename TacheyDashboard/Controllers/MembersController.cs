@@ -9,7 +9,7 @@ using TacheyDashboard.Service;
 
 namespace TacheyDashboard.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class MembersController : Controller
     {
         private readonly TacheyContext _context;

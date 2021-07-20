@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 
 namespace TacheyDashboard.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class CoursesController : Controller
     {
         private readonly TacheyContext _context;
