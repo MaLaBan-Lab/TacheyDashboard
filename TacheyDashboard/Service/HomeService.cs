@@ -224,7 +224,7 @@ namespace TacheyDashboard.Service
         public dynamic GetTotalData()
         {
             // 總銷售金額
-            var orderPrices = GetAllOrderData().Select(c => c.UnitPrice).Sum();
+            var orderPrices = Convert.ToDecimal(GetAllOrderData().Select(c => c.UnitPrice).Sum()); 
 
             // 總銷售數
             var orderCount = GetAllOrderData().Select(x => x.OrderID).Count();
