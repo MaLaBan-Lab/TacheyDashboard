@@ -38,6 +38,7 @@ namespace TacheyDashboard
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDBContext>();
 
             services.AddScoped<TacheyRepository>();
+            services.AddScoped<CoursesService>();
             services.AddScoped<HomeService>();
         }
 
