@@ -37,7 +37,19 @@ namespace TacheyDashboard.Controllers
 
                 if (result.Succeeded)
                 {
+                    //if(User.Identity.IsAuthenticated)
+                    //{
+                    //    if(User.IsInRole("Admin"))
+                    //    {
+                    //        return RedirectToAction("Index", "Home");
+                    //    }
+                    //    else
+                    //    {
+                    //        return RedirectToAction("UploadVideo", "Common");
+                    //    }
+                    //}
                     return RedirectToAction("Index", "Home");
+
                 }
 
                 ModelState.AddModelError(string.Empty, "登入嘗試失試。");
