@@ -1,7 +1,29 @@
-﻿@*
+﻿@*@model TacheyDashboard.ViewModel.OrderViewModel*@
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
 }
 
 <h1>Order</h1>
+<div id="test">
+    <template>
+        <div>
+            <b-table striped hover :items="items"></b-table>
+        </div>
+    </template>
+</div>
+
+@section endJS{
+    <script>
+        let app = new Vue({
+            el: '#test',
+        /*export default */
+            data() {
+                return {
+                    items: @Html.Raw(ViewBag.jsonString)
+                }
+            }
+        })
+    </script>
+}

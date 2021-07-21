@@ -5,3 +5,26 @@
 }
 
 <h1>Invite</h1>
+<div id="test">
+    <template>
+        <div>
+            <b-table striped hover :items="items"></b-table>
+        </div>
+    </template>
+</div>
+
+@section endJS{
+    <script>
+        let app = new Vue({
+            el: '#test',
+        /*export default */
+            data() {
+                return {
+                    items: 
+                        @Html.Raw(ViewBag.jsonString)
+                    
+                }
+            }
+        })
+    </script>
+}
