@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +10,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Tachey001.Repository;
 using TacheyDashboard.Models;
+using TacheyDashboard.Service;
 
 namespace TacheyDashboard
 {  
@@ -28,6 +31,15 @@ namespace TacheyDashboard
             services.AddControllersWithViews();
             services.AddDbContext<TacheyContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("TacheyContext")));
+
+            string connectionString = Configuration.GetConnectionString("TacheyContext");
+            services.AddDbContext<AppDBContext>(c => c.UseSqlServer(connectionString));
+
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDBContext>();
+
+            services.AddScoped<TacheyRepository>();
+            services.AddScoped<CoursesService>();
+            services.AddScoped<HomeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +59,8 @@ namespace TacheyDashboard
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

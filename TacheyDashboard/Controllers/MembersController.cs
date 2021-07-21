@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using TacheyDashboard.Service;
 
 namespace TacheyDashboard.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class MembersController : Controller
     {
         private readonly TacheyContext _context;

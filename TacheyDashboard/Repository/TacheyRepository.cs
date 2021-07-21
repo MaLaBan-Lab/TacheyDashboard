@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
@@ -21,7 +21,7 @@ namespace Tachey001.Repository
 
         public TacheyRepository(TacheyContext tacheyContext)
         {
-            TacheyContext = tacheyContext;
+            _context = tacheyContext;
         }
 
         public void Create<T>(T value) where T : class

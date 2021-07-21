@@ -7,5 +7,6 @@ namespace TacheyDashboard.Service
 {
     public class CommonService
     {
+
     }
 }
