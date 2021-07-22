@@ -1,11 +1,10 @@
 ﻿
 @{
-    Layout = "_LayoutOrder";
     ViewData["Title"] = "test";
-
+    
 }
 
-<h1>訂單管理頁面</h1>
+<h1>test</h1>
 <div id="app">
     <b-container fluid>
         <!-- User Interface controls -->
@@ -58,18 +57,17 @@
 
 @section end{
     <script>
-        
         let app = new Vue({
             el: '#app',
             data: {
-               items:@Html.Raw(ViewBag.jsonString),
-               fields: [
+                items: @Html.Raw(ViewBag.jsonString),
+                fields: [
                     { key: 'OrderId', label: 'OrderID', sortable: true, sortDirection: 'desc' },
                     { key: 'MemberId', label: 'MemberId', sortable: true, sortDirection: 'desc' },
                     { key: 'OrderStatus', label: 'OrderStatus', sortable: true, sortDirection: 'desc'},
                     { key: 'PayMethod', label: 'PayMethod', sortable: true, sortDirection: 'desc'},
                     { key: 'TotalPrice', label: 'TotalPrice', sortable: true, sortDirection: 'desc'},
-
+                   
                 ],
                 totalRows: 1,
                 currentPage: 1,
@@ -96,15 +94,9 @@
                         })
                 }
             },
-            create (){
-                this.getData()
-            },
-
             mounted() {
-                this.getData()
-                this.totalRows = this.items.length
                 // Set the initial number of items
-
+                this.totalRows = this.items.length
             },
             methods: {
                 info(item, index, button) {
@@ -120,20 +112,7 @@
                     // Trigger pagination to update the number of buttons/pages due to filtering
                     this.totalRows = filteredItems.length
                     this.currentPage = 1
-                },
-                getData() {
-                    var that = this;
-                    $.ajax({
-                        url: 'https://localhost:44363/orders/orderdata',
-                        type: "POST",
-                        success: function (returnData) {
-                            that.items = JSON.parse(returnData)
-                            console.warn(returnData)
-                        }
-
-                    })
                 }
-
             }
         });
     </script>

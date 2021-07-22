@@ -16,6 +16,7 @@ namespace Tachey001.Repository
 
         public TacheyRepository(DbContext context)
         {
+           
             _context = context;
         }
 
@@ -59,5 +60,6 @@ namespace Tachey001.Repository
         {
             _context.SaveChanges();
         }
+       
     }
 }

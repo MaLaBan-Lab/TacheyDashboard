@@ -8,18 +8,13 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
     <link href="~/css/styles.css" rel="stylesheet" />
-
-    <script src="~/lib/Chart.js/Chart.min.js"></script>
-    
-
-    @await RenderSectionAsync("topCSS", required: false)
-    @await RenderSectionAsync("topJS", required: false)
-
+    @*@Styles.Render("~/Assets/css/styles.css")*@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
 
     <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
 </head>
 <body>
+    
     <header class="sb-nav-fixed">
         @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
                 <div class="container">
@@ -42,52 +37,26 @@
             </nav>*@
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="#">Tachey</a>
+            <a class="navbar-brand ps-3" href="index.html">Tachey</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
             <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-                @*<div class="input-group">
+                <div class="input-group">
                     <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
                     <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
-                </div>*@
+                </div>
             </form>
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-                    @*<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="#!">Settings</a></li>
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="#!">Logout</a></li>
-                    </ul>*@
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            @*<li><a class="dropdown-item" href="#!">Settings</a></li>
-                            <li><a class="dropdown-item" href="#!">Activity Log</a></li>*@
-                            @*<li><hr class="dropdown-divider" /></li>*@
-                            <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>
-                        </ul>
-                        @*<ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
-                            </li>
-                        </ul>*@
-                    }
-                    else
-                    {
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                        </ul>
-                    }
+                    </ul>
                 </li>
             </ul>
         </nav>
@@ -96,46 +65,39 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    @*<div class="sb-sidenav-menu-heading">Core</div>*@
-                                    <a class="nav-link" href="@Url.Action("Index", "Home")">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                        總覽
-                                    </a>
-                                    @*<div class="sb-sidenav-menu-heading">Interface</div>*@
-                                    <a class="nav-link" href="@Url.Action("Member", "Members")">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                        會員管理
-                                    </a>
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                        訂單管理
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="@Url.Action("Order", "Orders")">訂單管理</a>
-                                            <a class="nav-link" href="@Url.Action("Point", "Orders")">積分管理</a>
-                                            <a class="nav-link" href="@Url.Action("Invite", "Orders")">優惠券管理</a>
-                                        </nav>
-                                    </div>
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                        課程管理
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="@Url.Action("Product", "Courses")">課程產品管理</a>
-                                            <a class="nav-link" href="@Url.Action("Application", "Courses")">課程上架申請管理</a>
-                                        </nav>
-                                    </div>
-                                }
-                            }
-
+                            @*<div class="sb-sidenav-menu-heading">Core</div>*@
+                            <a class="nav-link" href="@Url.Action("Index", "Home")">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                總覽
+                            </a>
+                            @*<div class="sb-sidenav-menu-heading">Interface</div>*@
+                            <a class="nav-link" href="@Url.Action("Member", "Members")">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                會員管理
+                            </a>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                訂單管理
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="@Url.Action("Order", "Orders")">訂單管理</a>
+                                    <a class="nav-link" href="@Url.Action("Point", "Orders")">積分管理</a>
+                                    <a class="nav-link" href="@Url.Action("Invite", "Orders")">優惠券管理</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                課程管理
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="@Url.Action("Product", "Courses")">課程產品管理</a>
+                                    <a class="nav-link" href="@Url.Action("Application", "Courses")">課程上架申請管理</a>
+                                </nav>
+                            </div>
                             <div class="sb-sidenav-menu-heading">一般使用者</div>
                             <a class="nav-link" href="@Url.Action("UploadVideo", "Common")">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
@@ -164,21 +126,21 @@
             </main>
         </div>*@
 
-    @*<footer class="border-top footer text-muted">
-        <div class="container">
+    <footer class="border-top footer text-muted">
+        @*<div class="container">
                 &copy; 2021 - TacheyDashboard - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
             </div>*@
-    @*<div class="container-fluid px-4">
-                    <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Your Website 2021</div>
-                        <div>
-                            <a href="#">Privacy Policy</a>
-                            &middot;
-                            <a href="#">Terms &amp; Conditions</a>
-                        </div>
+        @*<div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; Your Website 2021</div>
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
                     </div>
                 </div>
-        </footer>*@
+            </div>*@
+    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
@@ -201,9 +163,6 @@
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
     <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
     @RenderSection("Scripts", required: false)
-
-    @await RenderSectionAsync("endCSS", required: false)
-    @await RenderSectionAsync("endJS", required: false)
     @RenderSection("end", required: false)
 </body>
 </html>
