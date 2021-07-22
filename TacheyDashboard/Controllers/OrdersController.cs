@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 namespace TacheyDashboard.Controllers
 {
    
+    [Authorize(Roles = "Admin")]
     public class OrdersController : Controller
     {
         private readonly OrderInterface _ordersService;
