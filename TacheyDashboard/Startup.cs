@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TacheyDashboard.Models;
+using TacheyDashboard.Interface;
+using TacheyDashboard.Service;
 
 namespace TacheyDashboard
 {  
@@ -28,6 +30,7 @@ namespace TacheyDashboard
             services.AddControllersWithViews();
             services.AddDbContext<TacheyContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("TacheyContext")));
+            services.AddTransient<OrderInterface, OrdersService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
