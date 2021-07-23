@@ -6,14 +6,15 @@ using Tachey001.Repository;
 using TacheyDashboard.Interface;
 using TacheyDashboard.Models;
 using TacheyDashboard.ViewModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace TacheyDashboard.Service
 {
     public class OrdersService : OrderInterface
     {
 
-        private readonly TacheyContext _context;
-        public OrdersService(TacheyContext context)
+        private readonly TacheyRepository _context;
+        public OrdersService(TacheyRepository context)
         {
             _context = context;
         }
@@ -21,7 +22,7 @@ namespace TacheyDashboard.Service
        
         public List<OrderViewModel> GetOrderViewModels()
         {
-            var order = _context.Orders;
+            var order = _context.GetAll<Order>();
 
             var result = (from o in order
                          select new OrderViewModel
@@ -43,7 +44,7 @@ namespace TacheyDashboard.Service
 
         public decimal GetTotalPrice(string OrderId)
         {
-            var orderdetail = _context.OrderDetails;
+            var orderdetail = _context.GetAll<OrderDetail>();
             decimal result = 0;
             foreach (var item in orderdetail)
             {
@@ -57,7 +58,7 @@ namespace TacheyDashboard.Service
 
         public List<Point> GetPoint()
         {
-            var point = _context.Points;
+            var point = _context.GetAll<Point>();
 
             var result = from p in point
                          select p;
@@ -66,12 +67,24 @@ namespace TacheyDashboard.Service
         }
         public List<Ticket> GetTicket()
         {
-            var ticket = _context.Tickets;
+            var ticket = _context.GetAll<Ticket>();
 
             var result = from t in ticket
                          select t;
 
             return result.ToList();
+        }
+        public void SendTicket(string ticketid)
+        {
+            var Member = _context.GetAll<Member>();
+            foreach (var item in Member)
+            {
+                TicketOwner t = new TicketOwner { TicketId = ticketid, MemberId = item.MemberId };
+                _context.Create<TicketOwner>(t);
+               
+            }
+            _context.SaveChanges();
+
         }
 
 

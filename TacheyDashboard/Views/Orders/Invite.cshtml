@@ -9,6 +9,25 @@
     <b-container fluid>
         <!-- User Interface controls -->
         <b-row>
+            <b-col lg="6" class="my-1">
+                <b-form-group label="Filter"
+                              label-for="filter-input"
+                              label-cols-sm="1"
+                              @*label-align-sm="right"*@
+                              label-size="sm"
+                              class="mb-0 ">
+                    <b-input-group size="sm">
+                        <b-form-input id="filter-input"
+                                      v-model="filter"
+                                      type="search"
+                                      placeholder="Type to Search"></b-form-input>
+
+                        <b-input-group-append>
+                            <b-button :disabled="!filter" v-on:click="filter = ''">Clear</b-button>
+                        </b-input-group-append>
+                    </b-input-group>
+                </b-form-group>
+            </b-col>
 
             <b-col sm="5" md="6" class="my-1">
                 <b-form-group label="Per page" label-for="per-page-select" label-cols-sm="6" label-cols-md="4"
@@ -18,10 +37,8 @@
                 </b-form-group>
             </b-col>
 
-            <b-col sm="7" md="6" class="my-1">
-                <b-pagination v-model="currentPage" :total-rows="totalRows" :per-page="perPage" align="fill"
-                              size="sm" class="my-0"></b-pagination>
-            </b-col>
+
+
         </b-row>
 
         <!-- Main table element -->
@@ -52,11 +69,25 @@
         <b-modal :id="infoModal.id" :title="infoModal.title" ok-only v-on:hide="resetInfoModal">
             <pre>{{ infoModal.content }}</pre>
         </b-modal>
+        <div class="row justify-content-between">
+            <b-col sm="7" md="6" class="my-1">
+                <b-pagination v-model="currentPage" :total-rows="totalRows" :per-page="perPage" align="fill"
+                              size="sm" class="my-0"></b-pagination>
+            </b-col>
+            <button class="col-md-1 col-sm-7 btn btn-primary me-md-2" v-on:click="sendValue">
+                發送折扣卷
+            </button>
+        </div>
+
     </b-container>
 </div>
 
 @section end{
     <script>
+
+        var takevalue;
+        
+
         let app = new Vue({
             el: '#app',
             data: {
@@ -83,6 +114,11 @@
                     id: 'info-modal',
                     title: '',
                     content: ''
+                }
+            },
+            watch: {
+                items: function () {
+                    alert("測試")
                 }
             },
             computed: {
@@ -113,8 +149,54 @@
                     // Trigger pagination to update the number of buttons/pages due to filtering
                     this.totalRows = filteredItems.length
                     this.currentPage = 1
+                },
+                sendValue() {
+                    if (takevalue != null) {
+                        $.ajax({
+                            url: 'https://localhost:44363/orders/SendInvite?ticketid=' + takevalue,
+                            type: "POST",
+                            success: function () {
+
+                            }
+
+                        })
+                        alert("折價卷已發送");
+                    }
+                    else {
+                        alert("尚未選取折扣卷")
+                    }
+                    
+                    
                 }
             }
         });
+
+        var btns_1 = document.querySelectorAll('tbody>tr');
+        btns_1.forEach((item, index) => {
+            item.addEventListener('click', function (e) {
+                btns_1.forEach(Object => Object.setAttribute('style', ''))
+                //把每一個btn1的style清空
+                var _btn = e.path[0].closest('tr')
+                _btn.setAttribute('style', 'outline:1px solid red')
+                console.log(_btn.querySelector("td>div").innerText)
+                _btn.setAttribute('value', _btn.querySelector("td>div").innerText)
+                takevalue = item.getAttribute("value");
+            })
+        })
+        var sort = document.querySelectorAll('thead>tr>th');
+        sort.forEach((item, index) => {
+            item.addEventListener('click', function (e) {
+                takevalue = null;
+                btns_1.forEach((item, index) => {
+                    btns_1.forEach(Object => Object.setAttribute('style', ''))
+                        //把每一個btn1的style清空
+                    console.log("測試")
+                    item.setAttribute('value', item.querySelector("td>div").innerText)                   
+                })
+               
+            })
+        })
+       
+       
     </script>
 }

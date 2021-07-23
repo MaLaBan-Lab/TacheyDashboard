@@ -56,9 +56,14 @@ namespace TacheyDashboard.Controllers
             string jsonString = JsonConvert.SerializeObject(result);
             return jsonString;
         }
+        [HttpPost]
+        public void SendInvite(string ticketid)
+        {
+            _ordersService.SendTicket(ticketid);
+        }
 
-      
 
-     
+
+
     }
 }

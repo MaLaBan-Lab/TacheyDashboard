@@ -13,6 +13,6 @@ namespace TacheyDashboard.Interface
         decimal GetTotalPrice(string OrderId);
         List<Point> GetPoint();
         List<Ticket> GetTicket();
-
+        void SendTicket(string ticketid);
     }
 }
