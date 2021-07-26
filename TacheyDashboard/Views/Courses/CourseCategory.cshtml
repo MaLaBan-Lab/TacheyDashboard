@@ -1,0 +1,240 @@
+﻿
+@{
+    ViewData["Title"] = "CourseCategory";
+}
+@section topCSS {
+    <!-- Load required Bootstrap and BootstrapVue CSS -->
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+
+    <style>
+        /*被拖拽對象的樣式*/
+        .item {
+            padding: 6px;
+            background-color: #fdfdfd;
+            border: solid 1px #eee;
+            margin-bottom: 10px;
+            cursor: move;
+        }
+        /*選中樣式*/
+        .chosen {
+            border: solid 2px #3089dc !important;
+        }
+    </style>
+}
+@section topJS{
+    <!-- Load polyfills to support older browsers -->
+    <script src="//polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver"
+            crossorigin="anonymous"></script>
+
+    <!-- Load Vue followed by BootstrapVue -->
+    <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+
+    <!-- Load the following for BootstrapVueIcons support -->
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.5.2/vue.min.js"></script>
+    <!-- CDNJS :: Sortable (https://cdnjs.com/) -->
+    <script src="//cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
+    <!-- CDNJS :: Vue.Draggable (https://cdnjs.com/) -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>
+}
+
+
+<h1>CourseCategory</h1>
+
+<div id="app">
+
+    <div class="mb-5" role="group" aria-label="Basic example" style="text-align: right;">
+        <b-button class="btn btn-secondary mr-1" @*v-on:click="add"*@ v-b-modal.CategoryModal>新增</b-button>
+        @*<b-button class="btn btn-secondary mr-1" v-on:click="replace">Replace</b-button>*@
+        <b-button class="btn btn-success mr-1" v-on:click="saveParent">儲存</b-button>
+    </div>
+    @*<div>{{drag?'拖拽中':'拖拽停止'}}</div>*@
+    <draggable v-model="items" chosen-class="chosen" force-fallback="true" group="people" animation="1000" :start="onStart" :end="onEnd" :move="checkMove">
+        <transition-group>
+            <div class="item" v-for="element in items" :key="element.CategoryId">
+                <label>
+                    {{element.CategoryName}}
+                </label>
+                <b-button class="btn btn-primary mr-1" style="float: right;" @*v-on:click="detailParent(element.CategoryId)"*@ v-b-toggle.collapse-2>
+                    查看
+                </b-button>
+                <b-button class="btn btn-success mr-1" style="float: right;" v-on:click="editParent(element.CategoryId)">
+                    編輯
+                </b-button>
+                <b-button class="btn btn-danger mr-1" style="float: right;" v-on:click="deleteParent(element.CategoryId)">
+                    刪除
+                </b-button>
+            </div>
+            <!-- Element to collapse -->
+            <b-collapse id="collapse-2" class="ml-5">
+                @*<b-card>I am collapsible content!</b-card>*@
+                <div class="mb-5" role="group" aria-label="Basic example" style="text-align: right;">
+                    <b-button class="btn btn-secondary mr-1" @*v-on:click="add"*@ v-b-modal.CategoryDetailModal>新增</b-button>
+                </div>
+                <transition-group>
+                    <div class="item" v-for="element in itemsDetail" :key="element.CategoryId">
+                        <label v-if="element.CategoryId">
+                            {{element.CategoryName}}
+                        </label>
+                        <b-button class="btn btn-primary mr-1" style="float: right;" @*v-on:click="detailSon(element.CategoryId)"*@ v-b-toggle.collapse-2>
+                            查看
+                        </b-button>
+                        <b-button class="btn btn-success mr-1" style="float: right;" v-on:click="editSon(element.CategoryId)">
+                            編輯
+                        </b-button>
+                        <b-button class="btn btn-danger mr-1" style="float: right;" v-on:click="deleteSon(element.CategoryId)">
+                            刪除
+                        </b-button>
+                    </div>
+                </transition-group>
+            </b-collapse>
+
+        </transition-group>
+    </draggable>
+
+    <b-modal id="CategoryModal" ref="modal" title="Submit Your Name" :show="resetModal" :hidden="resetModal" :ok="handleOk">
+        <form ref="form" :submit.stop.prevent="handleSubmit">
+            <b-form-group label="Name" label-for="name-input" invalid-feedback="Name is required" :state="nameState">
+                <b-form-input id="name-input" v-model="name" :state="nameState" required></b-form-input>
+            </b-form-group>
+        </form>
+    </b-modal>
+
+    <b-modal id="CategoryDetailModal" ref="modal" title="Submit Your Name" :show="resetModal" :hidden="resetModal" :ok="handleSonOk">
+        <form ref="form" :submit.stop.prevent="handleSubmit">
+            <b-form-group label="Name" label-for="name-input" invalid-feedback="Name is required" :state="nameState">
+                <b-form-input id="name-input" v-model="name" :state="nameState" required></b-form-input>
+            </b-form-group>
+        </form>
+    </b-modal>
+</div>
+
+
+@section endJS{
+    <script type="module">
+        // 全域註冊組件
+        Vue.component('vuedraggable', window.vuedraggable)
+
+        var source = @Html.Raw(ViewBag.Labels);
+
+        var sourceDetail = @Html.Raw(ViewBag.LabelsDetail);
+
+        var id = (@Html.Raw(ViewBag.LastLabelsId)).CategoryId;
+
+        console.log(id);
+
+        var app = new Vue({
+            el: '#app',
+            components: {
+                vuedraggable: window.vuedraggable, // 當前頁面註冊組件
+            },
+            data() {
+                return {
+                    drag: false,
+                    items: source,
+                    items: sourceDetail,
+                    myArray: [
+                        { people: 'cn', id: 1, name: 'www.itxst.com' },
+                        { people: 'cn', id: 2, name: 'www.baidu.com' },
+                        { people: 'cn', id: 3, name: 'www.taobao.com' },
+                        { people: 'us', id: 4, name: 'www.google.com' }
+                    ],
+                    name: '',
+                    nameState: null,
+                    submittedNames: []
+                };
+            },
+            methods: {
+                onStart: function () {
+                    this.drag = true;
+                },
+                onEnd: function () {
+                    this.drag = false;
+                },
+                add: function () {
+                    this.$root.$emit('bv::show::modal', 'addModal', '#btnShow')
+                    //this.items.push({ CategoryName: "Juan " + id, CategoryId: id++ });
+                    //window.console.log("add " + id);
+                },
+                detailParent: function (idx) {
+                    alert('detailP ' + idx);
+                },
+                editParent: function (idx) {
+                    alert('editP ' + idx);
+                },
+                deleteParent: function (idx) {
+                    alert('deleteP ' + idx);
+                    this.items.splice(idx, 1);
+                },
+                detailSon: function (idx) {
+                    alert('detailS ' + idx);
+                },
+                editSon: function (idx) {
+                    alert('editS ' + idx);
+                },
+                deleteSon: function (idx) {
+                    alert('deleteS ' + idx);
+                    this.items.splice(idx, 1);
+                },
+                replace: function () {
+                    this.items = [{ CategoryName: "Edgard ", CategoryId: id++ }];
+                    window.console.log("replace " + id);
+                },
+                checkMove: function (e) {
+                    window.console.log("Future index: " + e.draggedContext.futureIndex);
+                },
+                saveParent: function () {
+                    window.console.log(this.items);
+                },
+                checkFormValidity() {
+                    const valid = this.$refs.form.checkValidity()
+                    this.nameState = valid
+                    return valid
+                },
+                resetModal() {
+                    this.name = ''
+                    this.nameState = null
+                },
+                handleOk(bvModalEvt) {
+                    // Prevent modal from closing
+                    bvModalEvt.preventDefault()
+                    // Trigger submit handler
+                    this.handleSubmit()
+                },
+                handleSubmit() {
+                    // Exit when the form isn't valid
+                    if (!this.checkFormValidity()) {
+                        return
+                    }
+                    // Push the name to submitted names
+                    this.submittedNames.push(this.name)
+                    // Hide the modal manually
+                    this.$nextTick(() => {
+                        this.$bvModal.hide('modal-prevent-closing')
+                    })
+                },
+                handleSonOk(bvModalEvt) {
+                    // Prevent modal from closing
+                    bvModalEvt.preventDefault()
+                    // Trigger submit handler
+                    this.handleSonSubmit()
+                },
+                handleSonSubmit() {
+                    // Exit when the form isn't valid
+                    if (!this.checkFormValidity()) {
+                        return
+                    }
+                    // Push the name to submitted names
+                    this.submittedNames.push(this.name)
+                    // Hide the modal manually
+                    this.$nextTick(() => {
+                        this.$bvModal.hide('modal-prevent-closing')
+                    })
+                }
+            }
+        });
+    </script>
+}
