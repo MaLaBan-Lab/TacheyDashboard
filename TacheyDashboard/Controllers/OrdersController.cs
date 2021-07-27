@@ -23,7 +23,6 @@ namespace TacheyDashboard.Controllers
         public OrdersController(OrderInterface orderservice)
         {
             _ordersService = orderservice;
-         
         }
         public IActionResult Point()
         {

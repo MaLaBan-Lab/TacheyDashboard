@@ -40,6 +40,7 @@ namespace TacheyDashboard.Models
         public virtual DbSet<Owner> Owners { get; set; }
         public virtual DbSet<PersonalUrl> PersonalUrls { get; set; }
         public virtual DbSet<Point> Points { get; set; }
+        public virtual DbSet<PointOwner> PointOwners { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<QuestionLike> QuestionLikes { get; set; }
         public virtual DbSet<ShoppingCart> ShoppingCarts { get; set; }
@@ -51,7 +52,7 @@ namespace TacheyDashboard.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=bs2021spring.database.windows.net;Initial Catalog=Tachey;User ID=bs;Password=g5gyuv6m*mn@;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+                optionsBuilder.UseSqlServer("Server=bs2021spring.database.windows.net;Database=Tachey;User Id=bs; Password=g5gyuv6m*mn@; Trusted_Connection=False; MultipleActiveResultSets=True;Integrated Security=False");
             }
         }
 
@@ -119,6 +120,8 @@ namespace TacheyDashboard.Models
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(256);
+
+                entity.Property(e => e.NormalizedName).HasMaxLength(256);
             });
 
             modelBuilder.Entity<AspNetUser>(entity =>
@@ -131,6 +134,10 @@ namespace TacheyDashboard.Models
                 entity.Property(e => e.Email).HasMaxLength(256);
 
                 entity.Property(e => e.LockoutEndDateUtc).HasColumnType("datetime");
+
+                entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
+
+                entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
 
                 entity.Property(e => e.UserName)
                     .IsRequired()
@@ -210,6 +217,8 @@ namespace TacheyDashboard.Models
                 entity.Property(e => e.CategoryId)
                     .HasColumnName("CategoryID")
                     .HasComment("分類編號");
+
+                entity.Property(e => e.DetailEngName).HasMaxLength(40);
 
                 entity.Property(e => e.DetailName)
                     .IsRequired()
@@ -350,6 +359,8 @@ namespace TacheyDashboard.Models
                     .ValueGeneratedNever()
                     .HasColumnName("CategoryID")
                     .HasComment("分類編號");
+
+                entity.Property(e => e.CategoryEngName).HasMaxLength(40);
 
                 entity.Property(e => e.CategoryName)
                     .IsRequired()
@@ -781,7 +792,6 @@ namespace TacheyDashboard.Models
                 entity.HasComment("積分");
 
                 entity.Property(e => e.PointId)
-                    .ValueGeneratedNever()
                     .HasColumnName("PointID")
                     .HasComment("積分編號");
 
@@ -794,7 +804,6 @@ namespace TacheyDashboard.Models
                     .HasComment("取得日期");
 
                 entity.Property(e => e.MemberId)
-                    .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("MemberID")
                     .HasComment("會員編號");
@@ -807,6 +816,19 @@ namespace TacheyDashboard.Models
                 entity.Property(e => e.PointNum).HasComment("積分數");
 
                 entity.Property(e => e.Status).HasComment("使用狀態");
+            });
+
+            modelBuilder.Entity<PointOwner>(entity =>
+            {
+                entity.HasKey(e => new { e.PointId, e.MemberId });
+
+                entity.ToTable("PointOwner");
+
+                entity.Property(e => e.PointId).HasColumnName("PointID");
+
+                entity.Property(e => e.MemberId)
+                    .HasMaxLength(128)
+                    .HasColumnName("MemberID");
             });
 
             modelBuilder.Entity<Question>(entity =>

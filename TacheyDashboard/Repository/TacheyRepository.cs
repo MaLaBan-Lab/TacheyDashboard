@@ -16,7 +16,6 @@ namespace Tachey001.Repository
 
         public TacheyRepository(DbContext context)
         {
-           
             _context = context;
         }
 

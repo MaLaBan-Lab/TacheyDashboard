@@ -18,8 +18,6 @@ namespace TacheyDashboard.Service
         {
             _context = context;
         }
-           
-       
         public List<OrderViewModel> GetOrderViewModels()
         {
             var order = _context.GetAll<Order>();
@@ -55,7 +53,6 @@ namespace TacheyDashboard.Service
             }
             return result;
         }
-
         public List<Point> GetPoint()
         {
             var point = _context.GetAll<Point>();
@@ -64,6 +61,25 @@ namespace TacheyDashboard.Service
                          select p;
         
             return result.ToList();
+        }
+        public Point CreatePoint(Point value)
+        {
+            var newPoint = new Point
+            {
+                PointName = value.PointName,
+                PointNum = value.PointNum,
+                ValidDate = value.ValidDate,
+                Status = false,
+                GetTime = DateTime.Now,
+                Deadline = DateTime.Now.AddDays((double)value.ValidDate)
+            };
+
+            _context.Create<Point>(newPoint);
+            _context.SaveChanges();
+
+            var result = _context.GetAll<Point>().LastOrDefault();
+
+            return result;
         }
         public List<Ticket> GetTicket()
         {

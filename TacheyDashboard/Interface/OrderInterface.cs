@@ -14,5 +14,6 @@ namespace TacheyDashboard.Interface
         List<Point> GetPoint();
         List<Ticket> GetTicket();
         void SendTicket(string ticketid);
+        Point CreatePoint(Point value);
     }
 }

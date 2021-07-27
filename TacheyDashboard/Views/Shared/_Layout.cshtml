@@ -149,9 +149,9 @@
                         </div>*@
                 </nav>
             </div>
-            <div id="layoutSidenav_content">
+            <div id="layoutSidenav_content" style="background-color: #f5f5f5;">
                 <main>
-                    <div class="container-fluid px-4">
+                    <div class="container-fluid p-4">
                         @RenderBody()
                     </div>
                 </main>
@@ -204,6 +204,5 @@
 
     @await RenderSectionAsync("endCSS", required: false)
     @await RenderSectionAsync("endJS", required: false)
-    @RenderSection("end", required: false)
 </body>
 </html>
