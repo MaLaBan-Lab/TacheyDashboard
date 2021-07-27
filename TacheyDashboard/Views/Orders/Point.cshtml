@@ -96,7 +96,7 @@
             <b-button variant="danger" v-on:click="cancel()">
                 取消
             </b-button>
-            <b-button variant="success" v-on:click="ok()">
+            <b-button variant="success" v-on:click="ok();sendPoint(infoModal.pointId)">
                 確認
             </b-button>
         </template>
@@ -131,7 +131,8 @@
                     infoModal: {
                         id: 'info-modal',
                         title: '',
-                        content: ''
+                        content: '',
+                        pointId: null
                     },
                     options: [
                         { value: '每日登入', text: '每日登入' },
@@ -174,10 +175,14 @@
                     this.infoModal.title = `${item.pointId}號-積分券`
                     this.infoModal.content = `確定發送${item.pointId}號積分券?`
                     this.$root.$emit('bv::show::modal', this.infoModal.id, button)
+                    this.infoModal.pointId = item.pointId
                 },
                 resetInfoModal() {
                     this.infoModal.title = ''
                     this.infoModal.content = ''
+                },
+                sendPoint(id) {
+                    console.log(id)
                 },
                 postPoint() {
                     console.log(this.PointForm)
@@ -186,7 +191,18 @@
                         pointNum: parseInt(this.PointForm.pointNum),
                         validDate: parseInt(this.PointForm.validDate)
                     }).then((res) => {
-                        console.log(res.data)
+                        this.unsendPoints.push({
+                            'pointId': res.data.result.pointId,
+                            'pointName': res.data.result.pointName,
+                            'pointNum': res.data.result.pointNum,
+                            'validDate': res.data.result.validDate,
+                            'status': (res.data.result.status) ? '已發送' : '未發送'
+                        })
+                        this.PointForm = {
+                            pointName: '',
+                            pointNum: 0,
+                            validDate: 0
+                        }
                     })
                 }
             }

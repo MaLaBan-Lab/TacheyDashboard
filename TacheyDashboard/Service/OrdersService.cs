@@ -69,17 +69,13 @@ namespace TacheyDashboard.Service
                 PointName = value.PointName,
                 PointNum = value.PointNum,
                 ValidDate = value.ValidDate,
-                Status = false,
-                GetTime = DateTime.Now,
-                Deadline = DateTime.Now.AddDays((double)value.ValidDate)
+                Status = false
             };
 
             _context.Create<Point>(newPoint);
             _context.SaveChanges();
 
-            var result = _context.GetAll<Point>().LastOrDefault();
-
-            return result;
+            return newPoint;
         }
         public List<Ticket> GetTicket()
         {
