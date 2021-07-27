@@ -26,6 +26,10 @@ namespace TacheyDashboard.Models
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
         public string UserName { get; set; }
+        public DateTimeOffset? LockoutEnd { get; set; }
+        public string NormalizedUserName { get; set; }
+        public string NormalizedEmail { get; set; }
+        public string ConcurrencyStamp { get; set; }
 
         public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; }

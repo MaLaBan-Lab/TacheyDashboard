@@ -27,7 +27,6 @@ namespace TacheyDashboard.Controllers
         {
             _context = context;
             _ordersService = orderservice;
-         
         }
         public IActionResult Point()
         {
