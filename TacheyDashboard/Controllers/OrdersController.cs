@@ -11,6 +11,7 @@ using TacheyDashboard.ViewModel;
 using TacheyDashboard.Interface;
 
 using JsonSerializer = Newtonsoft.Json.JsonSerializer;
+using Tachey001.Repository;
 
 namespace TacheyDashboard.Controllers
 {
@@ -19,10 +20,12 @@ namespace TacheyDashboard.Controllers
     public class OrdersController : Controller
     {
         private readonly OrderInterface _ordersService;
-      
+        private readonly TacheyContext _context;
 
-        public OrdersController(OrderInterface orderservice)
+
+        public OrdersController(OrderInterface orderservice,TacheyContext context)
         {
+            _context = context;
             _ordersService = orderservice;
          
         }
@@ -63,8 +66,25 @@ namespace TacheyDashboard.Controllers
             _ordersService.SendTicket(ticketid);
         }
 
+        public IActionResult Create()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("TicketId,TicketName,TicketStatus,Discount,Ticketdate,PayMethod,ProductType,UseTime")]
+        Ticket ticket)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Tickets.Add(ticket);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Invite");
+            }
 
+            return View(ticket);
+        }
 
     }
 }
