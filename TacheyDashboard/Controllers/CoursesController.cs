@@ -54,11 +54,11 @@ namespace TacheyDashboard.Controllers
 
             ViewBag.LastLabelsId = JsonResultId;
 
-            var resultDetailId = _coursesService.GetLastCategoryDetailId();
+            //var resultDetailId = _coursesService.GetLastCategoryDetailId();
 
-            string JsonResultDetailId = JsonConvert.SerializeObject(resultDetailId);
+            //string JsonResultDetailId = JsonConvert.SerializeObject(resultDetailId);
 
-            ViewBag.LastLabelsDetailId = JsonResultDetailId;
+            //ViewBag.LastLabelsDetailId = JsonResultDetailId;
 
             return View();
         }

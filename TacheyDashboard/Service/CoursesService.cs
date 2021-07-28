@@ -144,15 +144,6 @@ namespace TacheyDashboard.Service
 
             var result = lastnum == null ? (id + "0001") : lastnum.DetailID.ToString();
 
-            //if (lastnum == null)
-            //{
-            //    result = (id + "0001");
-            //}
-            //else 
-            //{
-            //    result = lastnum.DetailID.ToString();
-            //}
-
             return int.Parse(result);
         }
 
