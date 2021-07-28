@@ -10,7 +10,7 @@
     <link href="~/css/styles.css" rel="stylesheet" />
 
     <script src="~/lib/Chart.js/Chart.min.js"></script>
-    
+
 
     @await RenderSectionAsync("topCSS", required: false)
     @await RenderSectionAsync("topJS", required: false)
@@ -48,39 +48,39 @@
             <!-- Navbar Search-->
             <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
                 @*<div class="input-group">
-                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
-                    <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
-                </div>*@
+                        <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                        <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+                    </div>*@
             </form>
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     @*<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">Settings</a></li>
-                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
-                        <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Logout</a></li>
-                    </ul>*@
+                            <li><a class="dropdown-item" href="#!">Settings</a></li>
+                            <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li><a class="dropdown-item" href="#!">Logout</a></li>
+                        </ul>*@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             @*<li><a class="dropdown-item" href="#!">Settings</a></li>
-                            <li><a class="dropdown-item" href="#!">Activity Log</a></li>*@
+                                <li><a class="dropdown-item" href="#!">Activity Log</a></li>*@
                             @*<li><hr class="dropdown-divider" /></li>*@
                             <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>
                         </ul>
                         @*<ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
-                            </li>
-                        </ul>*@
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                                </li>
+                            </ul>*@
                     }
                     else
                     {
@@ -107,40 +107,60 @@
                                     </a>
                                     @*<div class="sb-sidenav-menu-heading">Interface</div>*@
                                     <a class="nav-link" href="@Url.Action("Member", "Members")">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                        <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                         會員管理
                                     </a>
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                    <a class="nav-link" href="@Url.Action("Order", "Orders")">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
                                         訂單管理
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                     </a>
-                                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="@Url.Action("Order", "Orders")">訂單管理</a>
-                                            <a class="nav-link" href="@Url.Action("Point", "Orders")">積分管理</a>
-                                            <a class="nav-link" href="@Url.Action("Invite", "Orders")">優惠券管理</a>
-                                        </nav>
-                                    </div>
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                                    <a class="nav-link" href="@Url.Action("Point", "Orders")">
+                                        <div class="sb-nav-link-icon"><i class="far fa-gem"></i></div>
+                                        積分管理
+                                    </a>
+                                    <a class="nav-link" href="@Url.Action("Invite", "Orders")">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-ticket-alt"></i></div>
+                                        優惠券管理
+                                    </a>
+                                    <a class="nav-link" href="@Url.Action("Product", "Courses")">
                                         <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                        課程管理
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                        課程產品管理
                                     </a>
-                                    <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="@Url.Action("Product", "Courses")">課程產品管理</a>
-                                            <a class="nav-link" href="@Url.Action("Application", "Courses")">課程上架申請管理</a>
-                                        </nav>
-                                    </div>
+                                    <a class="nav-link" href="@Url.Action("Application", "Courses")">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-cart-plus"></i></div>
+                                        課程上架申請管理
+                                    </a>
+                                    @*<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                            訂單管理
+                                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                        </a>
+                                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                            <nav class="sb-sidenav-menu-nested nav">
+                                                <a class="nav-link" href="@Url.Action("Order", "Orders")">訂單管理</a>
+                                                <a class="nav-link" href="@Url.Action("Point", "Orders")">積分管理</a>
+                                                <a class="nav-link" href="@Url.Action("Invite", "Orders")">優惠券管理</a>
+                                            </nav>
+                                        </div>*@
+                                    @*<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                                            <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                            課程管理
+                                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                        </a>
+                                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                                            <nav class="sb-sidenav-menu-nested nav">
+                                                <a class="nav-link" href="@Url.Action("Product", "Courses")">課程產品管理</a>
+                                                <a class="nav-link" href="@Url.Action("Application", "Courses")">課程上架申請管理</a>
+                                            </nav>
+                                        </div>*@
                                 }
                             }
 
                             @*<div class="sb-sidenav-menu-heading">一般使用者</div>
-                            <a class="nav-link" href="@Url.Action("UploadVideo", "Common")">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                影片上架
-                            </a>*@
+                                <a class="nav-link" href="@Url.Action("UploadVideo", "Common")">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                    影片上架
+                                </a>*@
                         </div>
                     </div>
                     @*<div class="sb-sidenav-footer">
