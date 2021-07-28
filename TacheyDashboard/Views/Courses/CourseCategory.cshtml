@@ -41,7 +41,7 @@
 }
 
 
-<h1>CourseCategory</h1>
+<h1>課程種類管理</h1>
 
 <div id="app">
     <div class="mb-5" role="group" aria-label="Basic example" style="text-align: right;">
@@ -75,7 +75,7 @@
             <!-- Element to collapse --><!--子項目-->
             <b-collapse :id="'collapse-' + element.CategoryId" class="ml-5">
                 <div class="mb-1" role="group" aria-label="Basic example" style="text-align: right;">
-                    <b-button class="btn btn-info mr-1" v-on:click="sendInfo(element.CategoryId, element.CategoryName)" v-b-modal.category-detail-modal>新增</b-button>
+                    <b-button class="btn btn-warning mr-1" v-on:click="sendInfo(element.CategoryId, element.CategoryName)" v-b-modal.category-detail-modal>新增</b-button>
                 </div>
                 <div v-for="elementDetail in itemsDetail">
                     <transition-group v-if="elementDetail.CategoryId == element.CategoryId">
@@ -131,7 +131,7 @@
     </b-modal>
 
     @*子項目*@
-    <b-modal id="category-detail-modal" hide-footer title="新增課程主項目">
+    <b-modal id="category-detail-modal" hide-footer title="新增課程子項目">
 
         <label for="name-input">名稱</label>
         <b-form-input id="name-input" v-model="name" :state="validation" required></b-form-input>
@@ -147,7 +147,7 @@
 
     </b-modal>
 
-    <b-modal id="category-detail-edit-modal" hide-footer title="更新課程主項目">
+    <b-modal id="category-detail-edit-modal" hide-footer title="更新課程子項目">
 
         <label for="name-input">名稱</label>
         <b-form-input id="name-input" :value="onClickName" v-model="onClickName" :state="validationEdit" required></b-form-input>

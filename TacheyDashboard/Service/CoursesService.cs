@@ -75,12 +75,6 @@ namespace TacheyDashboard.Service
             _tacheyRepository.SaveChanges();
         }
 
-        private TacheyRepository _tacheyRepository;
-        public CoursesService(TacheyRepository tacheyRepository)
-        {
-            _tacheyRepository = tacheyRepository;
-        }
-
         public List<CoursesViewModel> GetAllCourseCategory()
         {
             var category = _tacheyRepository.GetAll<CourseCategory>();
