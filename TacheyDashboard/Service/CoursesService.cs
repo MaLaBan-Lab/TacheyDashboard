@@ -251,8 +251,11 @@ namespace TacheyDashboard.Service
         {
             var result = _tacheyRepository.Get<CourseCategory>(x => x.CategoryId == CategoryId);
             _tacheyRepository.Delete(result);
-            _tacheyRepository.SaveChanges();
 
+            var resultD = _tacheyRepository.Get<CategoryDetail>(x => x.CategoryId == CategoryId);
+            _tacheyRepository.Delete(resultD);
+
+            _tacheyRepository.SaveChanges();
         }
 
         public void UpdateSonChoice(int CategoryId, int DetailID, string DetailName)
