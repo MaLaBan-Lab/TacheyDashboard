@@ -130,37 +130,41 @@
                                         <div class="sb-nav-link-icon"><i class="fas fa-cart-plus"></i></div>
                                         課程上架申請管理
                                     </a>
+                                    <a class="nav-link" href="@Url.Action("CourseCategory", "Courses")">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-archive"></i></div>
+                                        課程種類管理
+                                    </a>
                                     @*<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                            訂單管理
-                                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                        </a>
-                                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                            <nav class="sb-sidenav-menu-nested nav">
-                                                <a class="nav-link" href="@Url.Action("Order", "Orders")">訂單管理</a>
-                                                <a class="nav-link" href="@Url.Action("Point", "Orders")">積分管理</a>
-                                                <a class="nav-link" href="@Url.Action("Invite", "Orders")">優惠券管理</a>
-                                            </nav>
-                                        </div>*@
+                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                    訂單管理
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="@Url.Action("Order", "Orders")">訂單管理</a>
+                        <a class="nav-link" href="@Url.Action("Point", "Orders")">積分管理</a>
+                        <a class="nav-link" href="@Url.Action("Invite", "Orders")">優惠券管理</a>
+                    </nav>
+                </div>*@
                                     @*<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                                            <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                            課程管理
-                                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                        </a>
-                                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                                            <nav class="sb-sidenav-menu-nested nav">
-                                                <a class="nav-link" href="@Url.Action("Product", "Courses")">課程產品管理</a>
-                                                <a class="nav-link" href="@Url.Action("Application", "Courses")">課程上架申請管理</a>
-                                            </nav>
-                                        </div>*@
+                    <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                    課程管理
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="@Url.Action("Product", "Courses")">課程產品管理</a>
+                        <a class="nav-link" href="@Url.Action("Application", "Courses")">課程上架申請管理</a>
+                    </nav>
+                </div>*@
                                 }
                             }
 
                             @*<div class="sb-sidenav-menu-heading">一般使用者</div>
-                                <a class="nav-link" href="@Url.Action("UploadVideo", "Common")">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                    影片上架
-                                </a>*@
+        <a class="nav-link" href="@Url.Action("UploadVideo", "Common")">
+            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+            影片上架
+        </a>*@
                         </div>
                     </div>
                     @*<div class="sb-sidenav-footer">
