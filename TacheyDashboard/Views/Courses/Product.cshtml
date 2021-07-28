@@ -6,6 +6,7 @@
     <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
     <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
 
+
     <style>
         pre {
             font-size: 18px;
@@ -28,6 +29,15 @@
             text-decoration: none;
             color: white;
         }
+
+
+        tr:nth-of-type(even) td {
+            background: whitesmoke;
+        }
+
+        tr:hover td {
+            background-color:lightgray;
+        }    
     </style>
 }
 @section topJs{
@@ -43,12 +53,55 @@
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
 }
 
-<h1>課程上架管理</h1>
+<h1 class="m-2">課程管理</h1>
 
 <div id="app" v-cloak>
     <b-container fluid>
         <!-- User Interface controls -->
         <b-row>
+            <!-- 排序 -->
+            <b-col lg="6" class="my-1">
+                <b-form-group label="排序" label-for="sort-by-select" label-cols-sm="3" label-align-sm="right"
+                              label-size="sm" class="mb-0" v-slot="{ ariaDescribedby }">
+                    <b-input-group size="sm">
+                        <b-form-select id="sort-by-select" v-model="sortBy" :options="sortOptions"
+                                       :aria-describedby="ariaDescribedby" class="w-75">
+                            <template #first>
+                                <option value="">-- 未選擇 --</option>
+                            </template>
+                        </b-form-select>
+
+                        <b-form-select v-model="sortDesc" :disabled="!sortBy" :aria-describedby="ariaDescribedby"
+                                       size="sm" class="w-25">
+                            <option :value="false">Asc</option>
+                            <option :value="true">Desc</option>
+                        </b-form-select>
+                    </b-input-group>
+                </b-form-group>
+            </b-col>
+
+            <!-- 搜尋 -->
+            <b-col lg="6" class="my-1">
+                <b-form-group label="搜尋"
+                              label-for="filter-input"
+                              label-cols-sm="3"
+                              label-align-sm="right"
+                              label-size="sm"
+                              class="mb-0">
+                    <b-input-group size="sm">
+                        <b-form-input id="filter-input"
+                                      v-model="filter"
+                                      type="search"
+                                      placeholder="Search"></b-form-input>
+
+                        <b-input-group-append>
+                            <b-button :disabled="!filter" v-on:click="filter = ''">清除</b-button>
+                        </b-input-group-append>
+                    </b-input-group>
+                </b-form-group>
+            </b-col>
+
+            <!-- 分頁 -->
             <b-col sm="5" md="6" class="my-1">
                 <b-form-group label="每頁顯示" label-for="per-page-select" label-cols-sm="6" label-cols-md="4"
                               label-cols-lg="3" label-align-sm="right" label-size="sm" class="mb-0">
@@ -72,11 +125,7 @@
                 <b-button size="sm" v-on:click="info(row.item, row.index, $event.target)" class="m-1">
                     審核課程
                 </b-button>
-                @*<b-button size="sm" variant="success" class="m-1">
-                        @Html.ActionLink("影片審核","Application", "Courses")
-                    </b-button>*@
             </template>
-
         </b-table>
 
         <!-- Info modal -->
@@ -179,13 +228,13 @@
                     <b-button variant="danger"
                               size="sm"
                               class="float-right m-1"
-                              v-on:click="sentfalse">
+                              v-on:click="sentjudge(false)">
                         不通過
                     </b-button>
                     <b-button variant="success"
                               size="sm"
                               class="float-right m-1"
-                              v-on:click="sentpass">
+                              v-on:click="sentjudge(true)">
                         通過
                     </b-button>
                 </div>
@@ -202,14 +251,15 @@
             data: {
                 items: source,
                 fields: [
-                    { key: 'CourseId', label: '課程Id', sortable: false, class: "col-2"},
-                    { key: 'Title', label: '課程標題', sortable: false, class: "col-1"},
-                    { key: 'OriginalPrice', label: '原價', sortable: true, sortDirection: 'desc', class: "col-1" },
-                    { key: 'TotalMinTime', label: '長度', sortable: true, sortDirection: 'desc', class: "col-1"},
-                    { key: 'MemberId', label: '開課會員Id', sortable: false, class: "col-2"},
-                    { key: 'CategoryName', label: '類別', sortable: true, sortDirection: 'desc', class: "col-1"},
-                    { key: 'MainClick', label: '點擊數', sortable: true, sortDirection: 'desc', class: "col-1"},
-                    { key: 'CreateVerify', label: '狀態', sortable: true, sortDirection: 'desc', class: "col-1"},
+                    { key: 'CourseId', label: '課程Id', sortable: false, },
+                    { key: 'Title', label: '課程標題', sortable: false,  },
+                    //{ key: 'TitlePageImageURL', label: '封面圖片', sortable: false, class: "col-2" },
+                    { key: 'OriginalPrice', label: '原價', sortable: true, sortDirection: 'desc',  },
+                    { key: 'TotalMinTime', label: '課程長度', sortable: true, sortDirection: 'desc',},
+                    //{ key: 'MemberId', label: '開課會員Id', sortable: false, class: "col-2"},
+                    { key: 'CategoryName', label: '類別', sortable: true, sortDirection: 'desc', },
+                    { key: 'MainClick', label: '點擊數', sortable: true, sortDirection: 'desc', },
+                    { key: 'CreateVerify', label: '狀態', sortable: true, sortDirection: 'desc', },
                     { key: 'actions', label: '', sortable: false }
                 ],
                 totalRows: 1,
@@ -218,7 +268,7 @@
                 pageOptions: [10, 30 ,50, 150, { value: 1000, text: "Show a lot" }],
                 sortBy: '',
                 sortDesc: false,
-                sortDirection: 'asc',
+                sortDirection: 'Desc',
                 filter: null,
                 filterOn: [],
                 infoModal: {
@@ -255,7 +305,7 @@
                     this.infoModal.CoursePerson = `適合的族群 : ${item.CoursePerson}`
                     this.infoModal.OriginalPrice = `定價 : ${item.OriginalPrice}`
                     this.infoModal.TotalMinTime = `課程總長度 : ${item.TotalMinTime}`
-                    this.infoModal.MemberId = `開課會員編號 : ${item.MemberId}`
+                    //this.infoModal.MemberId = `開課會員編號 : ${item.MemberId}`
                     this.infoModal.LecturerIdentity = `開課會員身份 : ${item.LecturerIdentity}`
                     this.infoModal.CategoryName = `分類 : ${item.CategoryName}`
                     this.infoModal.DetailName = `細項 : ${item.DetailName}`
@@ -286,18 +336,9 @@
                     this.totalRows = filteredItems.length
                     this.currentPage = 1
                 },
-                sentpass() {
+                sentjudge(judge) {
                     $.ajax({
-                        url: `/Courses/Verify?CourseId=${this.infoModal.CourseId}&CreateVerify=true`,
-                        type: "GET",
-                        success: function () {
-                            window.location.reload();
-                        }
-                    })
-                },
-                sentfalse() {
-                    $.ajax({
-                        url: `/Courses/Verify?CourseId=${this.infoModal.CourseId}&CreateVerify=false`,
+                        url: `/Courses/Verify?CourseId=${this.infoModal.CourseId}&CreateVerify=${judge}`,
                         type: "GET",
                         success: function () {
                             window.location.reload();
