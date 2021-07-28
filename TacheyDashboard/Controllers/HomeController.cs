@@ -38,6 +38,11 @@ namespace TacheyDashboard.Controllers
 
         public IActionResult Index()
         {
+            if (!User.IsInRole("Admin") && User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("UploadVideo", "Common");
+            }
+
             var AnsAmount = _homeService.GetCourseCount();
 
             ViewData["TotalData"] = TotalData();

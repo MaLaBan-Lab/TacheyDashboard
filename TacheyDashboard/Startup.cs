@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tachey001.Repository;
 using TacheyDashboard.Models;
+using TacheyDashboard.Interface;
 using TacheyDashboard.Service;
 
 namespace TacheyDashboard
@@ -31,6 +32,7 @@ namespace TacheyDashboard
             services.AddControllersWithViews();
             services.AddDbContext<TacheyContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("TacheyContext")));
+            services.AddTransient<OrderInterface, OrdersService>();
 
             string connectionString = Configuration.GetConnectionString("TacheyContext");
             services.AddDbContext<AppDBContext>(c => c.UseSqlServer(connectionString));
@@ -38,6 +40,7 @@ namespace TacheyDashboard
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDBContext>();
 
             services.AddScoped<TacheyRepository>();
+            services.AddScoped<CoursesService>();
             services.AddScoped<HomeService>();
             services.AddScoped<CoursesService>();
         }

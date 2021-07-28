@@ -1,35 +1,15 @@
 ﻿
 @{
-    Layout = "_LayoutOrder";
     ViewData["Title"] = "test";
-
+    
 }
 
-<h1>訂單管理頁面</h1>
+<h1>test</h1>
 <div id="app">
     <b-container fluid>
         <!-- User Interface controls -->
         <b-row>
-            <b-col lg="6" class="my-1">
-                <b-form-group label="Filter"
-                              label-for="filter-input"
-                              label-cols-sm="1"
-                              @*label-align-sm="right"*@
-                              label-size="sm"
-                              class="mb-0 ">
-                    <b-input-group size="sm">
-                        <b-form-input id="filter-input"
-                                      v-model="filter"
-                                      type="search"
-                                      placeholder="Type to Search"></b-form-input>
-
-                        <b-input-group-append>
-                            <b-button :disabled="!filter" v-on:click="filter = ''">Clear</b-button>
-                        </b-input-group-append>
-                    </b-input-group>
-                </b-form-group>
-            </b-col>
-
+          
             <b-col sm="5" md="6" class="my-1">
                 <b-form-group label="Per page" label-for="per-page-select" label-cols-sm="6" label-cols-md="4"
                               label-cols-lg="3" label-align-sm="right" label-size="sm" class="mb-0">
@@ -38,8 +18,10 @@
                 </b-form-group>
             </b-col>
 
-           
-
+            <b-col sm="7" md="6" class="my-1">
+                <b-pagination v-model="currentPage" :total-rows="totalRows" :per-page="perPage" align="fill"
+                              size="sm" class="my-0"></b-pagination>
+            </b-col>
         </b-row>
 
         <!-- Main table element -->
@@ -70,29 +52,22 @@
         <b-modal :id="infoModal.id" :title="infoModal.title" ok-only v-on:hide="resetInfoModal">
             <pre>{{ infoModal.content }}</pre>
         </b-modal>
-        <div class="row">
-            <b-col sm="7" md="6" class="my-1">
-                <b-pagination v-model="currentPage" :total-rows="totalRows" :per-page="perPage" align="fill"
-                              size="sm" class="my-0"></b-pagination>
-            </b-col>
-        </div>
     </b-container>
 </div>
 
-@section endJS{
+@section end{
     <script>
-        
         let app = new Vue({
             el: '#app',
             data: {
-               items:@Html.Raw(ViewBag.jsonString),
-               fields: [
+                items: @Html.Raw(ViewBag.jsonString),
+                fields: [
                     { key: 'OrderId', label: 'OrderID', sortable: true, sortDirection: 'desc' },
                     { key: 'MemberId', label: 'MemberId', sortable: true, sortDirection: 'desc' },
                     { key: 'OrderStatus', label: 'OrderStatus', sortable: true, sortDirection: 'desc'},
                     { key: 'PayMethod', label: 'PayMethod', sortable: true, sortDirection: 'desc'},
                     { key: 'TotalPrice', label: 'TotalPrice', sortable: true, sortDirection: 'desc'},
-
+                   
                 ],
                 totalRows: 1,
                 currentPage: 1,
@@ -119,15 +94,9 @@
                         })
                 }
             },
-            create (){
-                this.getData()
-            },
-
             mounted() {
-                this.getData()
-                this.totalRows = this.items.length
                 // Set the initial number of items
-
+                this.totalRows = this.items.length
             },
             methods: {
                 info(item, index, button) {
@@ -143,20 +112,7 @@
                     // Trigger pagination to update the number of buttons/pages due to filtering
                     this.totalRows = filteredItems.length
                     this.currentPage = 1
-                },
-                getData() {
-                    var that = this;
-                    $.ajax({
-                        url: 'https://localhost:44363/orders/orderdata',
-                        type: "POST",
-                        success: function (returnData) {
-                            that.items = JSON.parse(returnData)
-                            console.warn(returnData)
-                        }
-
-                    })
                 }
-
             }
         });
     </script>
