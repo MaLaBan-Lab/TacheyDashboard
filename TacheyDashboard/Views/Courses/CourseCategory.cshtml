@@ -57,7 +57,8 @@
             <!--主項目-->
             <transition-group>
                 <div class="item" :key="element.CategoryId">
-                    <label>
+                    <i class="fas fa-bars mr-2"></i>
+                    <label style="font-size: 20px;">
                         {{element.CategoryName}}
                     </label>
                     <b-button class="btn btn-primary mr-1" style="float: right;" v-on:click="detailParent(element.CategoryId)" v-b-toggle="'collapse-' + element.CategoryId">
@@ -81,7 +82,8 @@
                     <transition-group v-if="elementDetail.CategoryId == element.CategoryId">
                         @*onClickId*@
                         <div class="item" :key="elementDetail.DetailID">
-                            <label>
+                            <i class="fas fa-bars mr-2"></i>
+                            <label style="font-size: 20px;">
                                 {{elementDetail.DetailName}}
                             </label>
                             <b-button class="btn btn-success mr-1" style="float: right;" v-on:click="sendInfo(elementDetail.CategoryId, elementDetail.DetailName, elementDetail.DetailID)" v-b-modal.category-detail-edit-modal>
