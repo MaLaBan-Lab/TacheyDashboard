@@ -54,7 +54,65 @@ namespace TacheyDashboard.Controllers
 
             ViewBag.LastLabelsId = JsonResultId;
 
+            var resultDetailId = _coursesService.GetLastCategoryDetailId();
+
+            string JsonResultDetailId = JsonConvert.SerializeObject(resultDetailId);
+
+            ViewBag.LastLabelsDetailId = JsonResultDetailId;
+
             return View();
         }
+
+        public int? CategoryDetailLastId(string id)
+        {
+            var resultDetailId = _coursesService.GetLastCategoryDetailId(id);
+
+            //string JsonResultDetailId = JsonConvert.SerializeObject(resultDetailId);
+
+            return resultDetailId;
+        }
+
+        public IActionResult AddParentChoice(int CategoryId, string CategoryName)
+        {
+            _coursesService.AddParentChoice(CategoryId, CategoryName);
+
+            return Redirect("CourseCategory");
+        }
+
+        public IActionResult UpdateParentChoice(int CategoryId, string CategoryName)
+        {
+            _coursesService.UpdateParentChoice(CategoryId, CategoryName);
+
+            return Redirect("CourseCategory");
+        }
+
+        public IActionResult DeleteParentChoice(int CategoryId)
+        {
+            _coursesService.DeleteParentChoice(CategoryId);
+
+            return Redirect("CourseCategory");
+        }
+
+        public IActionResult AddSonChoice(int CategoryId, int DetailID, string DetailName)
+        {
+            _coursesService.AddSonChoice(CategoryId, DetailID, DetailName);
+
+            return Redirect("CourseCategory");
+        }
+
+        public IActionResult UpdateSonChoice(int CategoryId, int DetailID, string DetailName)
+        {
+            _coursesService.UpdateSonChoice(CategoryId, DetailID, DetailName);
+
+            return Redirect("CourseCategory");
+        }
+
+        public IActionResult DeleteSonChoice(int DetailID)
+        {
+            _coursesService.DeleteSonChoice(DetailID);
+
+            return Redirect("CourseCategory");
+        }
+
     }
 }

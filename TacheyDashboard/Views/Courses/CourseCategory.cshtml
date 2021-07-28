@@ -34,82 +34,129 @@
     <!-- Load the following for BootstrapVueIcons support -->
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.5.2/vue.min.js"></script>
-    <!-- CDNJS :: Sortable (https://cdnjs.com/) -->
-    <script src="//cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
-    <!-- CDNJS :: Vue.Draggable (https://cdnjs.com/) -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>
+    @*<script src="//cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>*@
 }
 
 
 <h1>CourseCategory</h1>
 
 <div id="app">
-
     <div class="mb-5" role="group" aria-label="Basic example" style="text-align: right;">
-        <b-button class="btn btn-secondary mr-1" @*v-on:click="add"*@ v-b-modal.CategoryModal>新增</b-button>
+        <b-button class="btn btn-warning mr-1" @*v-on:click="add" ref="btnShow"*@ v-b-modal.category-modal>新增</b-button>
         @*<b-button class="btn btn-secondary mr-1" v-on:click="replace">Replace</b-button>*@
         <b-button class="btn btn-success mr-1" v-on:click="saveParent">儲存</b-button>
+
     </div>
     @*<div>{{drag?'拖拽中':'拖拽停止'}}</div>*@
     <draggable v-model="items" chosen-class="chosen" force-fallback="true" group="people" animation="1000" :start="onStart" :end="onEnd" :move="checkMove">
-        <transition-group>
-            <div class="item" v-for="element in items" :key="element.CategoryId">
-                <label>
-                    {{element.CategoryName}}
-                </label>
-                <b-button class="btn btn-primary mr-1" style="float: right;" @*v-on:click="detailParent(element.CategoryId)"*@ v-b-toggle.collapse-2>
-                    查看
-                </b-button>
-                <b-button class="btn btn-success mr-1" style="float: right;" v-on:click="editParent(element.CategoryId)">
-                    編輯
-                </b-button>
-                <b-button class="btn btn-danger mr-1" style="float: right;" v-on:click="deleteParent(element.CategoryId)">
-                    刪除
-                </b-button>
-            </div>
-            <!-- Element to collapse -->
-            <b-collapse id="collapse-2" class="ml-5">
-                @*<b-card>I am collapsible content!</b-card>*@
-                <div class="mb-5" role="group" aria-label="Basic example" style="text-align: right;">
-                    <b-button class="btn btn-secondary mr-1" @*v-on:click="add"*@ v-b-modal.CategoryDetailModal>新增</b-button>
-                </div>
-                <transition-group>
-                    <div class="item" v-for="element in itemsDetail" :key="element.CategoryId">
-                        <label v-if="element.CategoryId">
-                            {{element.CategoryName}}
-                        </label>
-                        <b-button class="btn btn-primary mr-1" style="float: right;" @*v-on:click="detailSon(element.CategoryId)"*@ v-b-toggle.collapse-2>
-                            查看
-                        </b-button>
-                        <b-button class="btn btn-success mr-1" style="float: right;" v-on:click="editSon(element.CategoryId)">
-                            編輯
-                        </b-button>
-                        <b-button class="btn btn-danger mr-1" style="float: right;" v-on:click="deleteSon(element.CategoryId)">
-                            刪除
-                        </b-button>
-                    </div>
-                </transition-group>
-            </b-collapse>
 
-        </transition-group>
+        <div v-for="element in items">
+            <transition-group>
+                <div class="item" :key="element.CategoryId">
+                    <label>
+                        {{element.CategoryName}}
+                    </label>
+                    <b-button class="btn btn-primary mr-1" style="float: right;" v-on:click="detailParent(element.CategoryId)" v-b-toggle="'collapse-' + element.CategoryId">
+                        查看
+                    </b-button>
+                    <b-button class="btn btn-success mr-1" style="float: right;" v-b-modal.category-edit-modal v-on:click="sendInfo(element.CategoryId, element.CategoryName)">
+                        編輯
+                    </b-button>
+                    <b-button class="btn btn-danger mr-1" style="float: right;" v-on:click="deleteParent(element.CategoryId)">
+                        刪除
+                    </b-button>
+                </div>
+            </transition-group>
+            <!-- Element to collapse -->
+            <b-collapse :id="'collapse-' + element.CategoryId" class="ml-5">
+                <div class="mb-1" role="group" aria-label="Basic example" style="text-align: right;">
+                    <b-button class="btn btn-info mr-1" v-on:click="sendInfo(element.CategoryId, element.CategoryName)" v-b-modal.category-detail-modal>新增</b-button>
+                </div>
+                <div v-for="elementDetail in itemsDetail">
+                    <transition-group v-if="elementDetail.CategoryId == element.CategoryId">
+    @*onClickId*@
+                        <div class="item" :key="elementDetail.DetailID">
+                            <label>
+                                {{elementDetail.DetailName}}
+                            </label>
+                            <b-button class="btn btn-success mr-1" style="float: right;" v-on:click="sendInfo(elementDetail.CategoryId, elementDetail.DetailName, elementDetail.DetailID)" v-b-modal.category-detail-edit-modal >
+                                編輯
+                            </b-button>
+                            <b-button class="btn btn-danger mr-1" style="float: right;" v-on:click="deleteSon(elementDetail.DetailID)">
+                                刪除
+                            </b-button>
+                        </div>
+                    </transition-group>
+                </div>
+            </b-collapse>
+        </div>
     </draggable>
 
-    <b-modal id="CategoryModal" ref="modal" title="Submit Your Name" :show="resetModal" :hidden="resetModal" :ok="handleOk">
-        <form ref="form" :submit.stop.prevent="handleSubmit">
-            <b-form-group label="Name" label-for="name-input" invalid-feedback="Name is required" :state="nameState">
-                <b-form-input id="name-input" v-model="name" :state="nameState" required></b-form-input>
-            </b-form-group>
-        </form>
+
+
+
+    <b-modal id="category-modal" hide-footer title="新增課程主項目">
+
+        <label for="name-input">名稱</label>
+        <b-form-input id="name-input" v-model="name" :state="validation" required></b-form-input>
+        <b-form-invalid-feedback :state="validation">
+            名稱不能為空白
+        </b-form-invalid-feedback>
+        <b-form-valid-feedback :state="validation">
+            正確輸入
+        </b-form-valid-feedback>
+
+        <b-button class="btn btn-success mt-2" v-on:click="addParent">儲存</b-button>
+
     </b-modal>
 
-    <b-modal id="CategoryDetailModal" ref="modal" title="Submit Your Name" :show="resetModal" :hidden="resetModal" :ok="handleSonOk">
-        <form ref="form" :submit.stop.prevent="handleSubmit">
-            <b-form-group label="Name" label-for="name-input" invalid-feedback="Name is required" :state="nameState">
-                <b-form-input id="name-input" v-model="name" :state="nameState" required></b-form-input>
-            </b-form-group>
-        </form>
+    <b-modal id="category-edit-modal" hide-footer title="更新課程主項目">
+
+        <label for="name-input">名稱</label>
+        <b-form-input id="name-input" :value="onClickName" v-model="onClickName" :state="validationEdit" required></b-form-input>
+        <b-form-invalid-feedback :state="validationEdit">
+            名稱不能為空白
+        </b-form-invalid-feedback>
+        <b-form-valid-feedback :state="validationEdit">
+            正確輸入
+        </b-form-valid-feedback>
+
+        <b-button class="btn btn-success mt-2" v-on:click="editParent">更改</b-button>
+
     </b-modal>
+
+    <b-modal id="category-detail-modal" hide-footer title="新增課程主項目">
+
+        <label for="name-input">名稱</label>
+        <b-form-input id="name-input" v-model="name" :state="validation" required></b-form-input>
+        <b-form-invalid-feedback :state="validation">
+            名稱不能為空白
+        </b-form-invalid-feedback>
+        <b-form-valid-feedback :state="validation">
+            正確輸入
+        </b-form-valid-feedback>
+
+        <b-button class="btn btn-success mt-2" v-on:click="addSon">儲存</b-button>
+
+    </b-modal>
+
+    <b-modal id="category-detail-edit-modal" hide-footer title="更新課程主項目">
+
+        <label for="name-input">名稱</label>
+        <b-form-input id="name-input" :value="onClickName" v-model="onClickName" :state="validationEdit" required></b-form-input>
+        <b-form-invalid-feedback :state="validationEdit">
+            名稱不能為空白
+        </b-form-invalid-feedback>
+        <b-form-valid-feedback :state="validationEdit">
+            正確輸入
+        </b-form-valid-feedback>
+
+        <b-button class="btn btn-success mt-2" v-on:click="editSon">更改</b-button>
+
+    </b-modal>
+
 </div>
 
 
@@ -124,6 +171,7 @@
 
         var id = (@Html.Raw(ViewBag.LastLabelsId)).CategoryId;
 
+
         console.log(id);
 
         var app = new Vue({
@@ -135,7 +183,7 @@
                 return {
                     drag: false,
                     items: source,
-                    items: sourceDetail,
+                    itemsDetail: sourceDetail,
                     myArray: [
                         { people: 'cn', id: 1, name: 'www.itxst.com' },
                         { people: 'cn', id: 2, name: 'www.baidu.com' },
@@ -144,8 +192,20 @@
                     ],
                     name: '',
                     nameState: null,
-                    submittedNames: []
+                    submittedNames: [],
+                    onClickId: 0,
+                    onClickName: '',
+                    onClickDetailId: 0,
+                    lastDatilId: 0,
                 };
+            },
+            computed: {
+                validation() {
+                    return this.name.length > 0
+                },
+                validationEdit() {
+                    return this.onClickName.length > 0
+                },
             },
             methods: {
                 onStart: function () {
@@ -155,39 +215,79 @@
                     this.drag = false;
                 },
                 add: function () {
-                    this.$root.$emit('bv::show::modal', 'addModal', '#btnShow')
+                    this.$root.$emit('bv::show::modal', 'CategoryModal', '#btnShow')
                     //this.items.push({ CategoryName: "Juan " + id, CategoryId: id++ });
                     //window.console.log("add " + id);
                 },
                 detailParent: function (idx) {
-                    alert('detailP ' + idx);
+                    this.onClickId = idx;
                 },
-                editParent: function (idx) {
-                    alert('editP ' + idx);
+                editParent: function () {
+                    if (this.onClickName.length <= 0) {
+                        return;
+                    }
+                    $.ajax({
+                        url: `/Courses/UpdateParentChoice?CategoryId=${this.onClickId}&CategoryName=${this.onClickName}`,
+                        type: "GET",
+                        success: function () {
+                            window.location.reload();
+                        }
+                    })
                 },
                 deleteParent: function (idx) {
-                    alert('deleteP ' + idx);
                     this.items.splice(idx, 1);
-                },
-                detailSon: function (idx) {
-                    alert('detailS ' + idx);
-                },
-                editSon: function (idx) {
-                    alert('editS ' + idx);
+                    $.ajax({
+                        url: `/Courses/DeleteParentChoice?CategoryId=${idx}`,
+                        type: "GET",
+                        success: function () {
+                            window.location.reload();
+                        }
+                    })
                 },
                 deleteSon: function (idx) {
-                    alert('deleteS ' + idx);
-                    this.items.splice(idx, 1);
+                    this.itemsDetail.splice(idx, 1);
+                    $.ajax({
+                        url: `/Courses/DeleteSonChoice?&DetailID=${idx}`,
+                        type: "GET",
+                        success: function () {
+                            window.location.reload();
+                        }
+                    })
+                },
+                editSon: function (idx) {
+                    if (this.onClickName.length <= 0) {
+                        return;
+                    }
+                    $.ajax({
+                        url: `/Courses/UpdateSonChoice?CategoryId=${this.onClickId}&DetailID=${this.onClickDetailId}&DetailName=${this.onClickName}`,
+                        type: "GET",
+                        success: function () {
+                            window.location.reload();
+                        }
+                    })
                 },
                 replace: function () {
                     this.items = [{ CategoryName: "Edgard ", CategoryId: id++ }];
                     window.console.log("replace " + id);
+                },
+                sendInfo(id, name, detailid) {
+                    this.onClickId = id;
+                    this.onClickName = name;
+                    this.onClickDetailId = detailid;
                 },
                 checkMove: function (e) {
                     window.console.log("Future index: " + e.draggedContext.futureIndex);
                 },
                 saveParent: function () {
                     window.console.log(this.items);
+                    this.$bvToast.toast(`儲存成功`, {
+                        title: '提示',
+                        autoHideDelay: 5000,
+                        appendToast: false,
+                        variant: 'success',
+                        solid: true,
+                        toaster: 'b-toaster-bottom-right',
+                    })
                 },
                 checkFormValidity() {
                     const valid = this.$refs.form.checkValidity()
@@ -205,6 +305,7 @@
                     this.handleSubmit()
                 },
                 handleSubmit() {
+                    alert("123");
                     // Exit when the form isn't valid
                     if (!this.checkFormValidity()) {
                         return
@@ -216,23 +317,64 @@
                         this.$bvModal.hide('modal-prevent-closing')
                     })
                 },
-                handleSonOk(bvModalEvt) {
+                addParent(bvModalEvt) {
                     // Prevent modal from closing
-                    bvModalEvt.preventDefault()
-                    // Trigger submit handler
-                    this.handleSonSubmit()
+                    //bvModalEvt.preventDefault()
+                    if (this.name.length <= 0) {
+                        return;
+                    }
+                    this.items.push({ CategoryName: this.name, CategoryId: id++ });
+                    $.ajax({
+                        url: `/Courses/AddParentChoice?CategoryId=${id}&CategoryName=${this.name}`,
+                        type: "GET",
+                        success: function () {
+                            window.location.reload();
+                        }
+                    })
+                },
+                addSon(bvModalEvt) {
+                    // Prevent modal from closing
+                    //bvModalEvt.preventDefault()
+                    if (this.name.length <= 0) {
+                        return;
+                    }
+                    //this.items.push({ DetailName: this.name, CategoryId: idd++ });
+                    //var onClickIdTemp = this.onClickId;
+                    //var nameTemp = this.name;
+                    $.ajax({
+                        url: `/Courses/CategoryDetailLastId?id=${this.onClickId}`,
+                        type: "GET",
+                        success: function (res) {
+                            //this.lastDatilId = res;
+                            res++;
+                            $.ajax({
+                                url: `/Courses/AddSonChoice?CategoryId=${app.onClickId}&DetailID=${res}&DetailName=${app.name}`,
+                                type: "GET",
+                                success: function () {
+                                    window.location.reload();
+                                }
+                            })
+                        }
+                    })
+                    //this.lastDatilId++;
+                    //id++;
+                    
                 },
                 handleSonSubmit() {
+                    console.log(this.name)
                     // Exit when the form isn't valid
                     if (!this.checkFormValidity()) {
                         return
                     }
-                    // Push the name to submitted names
-                    this.submittedNames.push(this.name)
-                    // Hide the modal manually
-                    this.$nextTick(() => {
-                        this.$bvModal.hide('modal-prevent-closing')
-                    })
+
+
+
+                    //// Push the name to submitted names
+                    //this.submittedNames.push(this.name)
+                    //// Hide the modal manually
+                    //this.$nextTick(() => {
+                    //    this.$bvModal.hide('modal-prevent-closing')
+                    //})
                 }
             }
         });
