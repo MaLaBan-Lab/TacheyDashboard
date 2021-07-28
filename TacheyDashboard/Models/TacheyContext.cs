@@ -796,11 +796,11 @@ namespace TacheyDashboard.Models
                     .HasComment("積分編號");
 
                 entity.Property(e => e.Deadline)
-                    .HasColumnType("datetime")
+                    .HasMaxLength(30)
                     .HasComment("有效期限");
 
                 entity.Property(e => e.GetTime)
-                    .HasColumnType("datetime")
+                    .HasMaxLength(30)
                     .HasComment("取得日期");
 
                 entity.Property(e => e.MemberId)

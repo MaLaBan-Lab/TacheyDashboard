@@ -13,7 +13,7 @@ namespace TacheyDashboard.Models
         public int PointNum { get; set; }
         public int ValidDate { get; set; }
         public bool Status { get; set; }
-        public DateTime? GetTime { get; set; }
-        public DateTime? Deadline { get; set; }
+        public string GetTime { get; set; }
+        public string Deadline { get; set; }
     }
 }

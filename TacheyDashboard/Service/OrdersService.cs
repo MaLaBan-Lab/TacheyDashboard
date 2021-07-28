@@ -53,6 +53,10 @@ namespace TacheyDashboard.Service
             }
             return result;
         }
+        /// <summary>
+        /// 取得積分
+        /// </summary>
+        /// <returns></returns>
         public List<Point> GetPoint()
         {
             var point = _context.GetAll<Point>();
@@ -62,6 +66,11 @@ namespace TacheyDashboard.Service
         
             return result.ToList();
         }
+        /// <summary>
+        /// 新增積分
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public Point CreatePoint(Point value)
         {
             var newPoint = new Point
@@ -76,6 +85,48 @@ namespace TacheyDashboard.Service
             _context.SaveChanges();
 
             return newPoint;
+        }
+        /// <summary>
+        /// 更新積分
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public Point UpdatePoint(Point value)
+        {
+            _context.Update<Point>(value);
+            _context.SaveChanges();
+
+            return value;
+        }
+        /// <summary>
+        /// 發送積分
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Point SendPoint(int id)
+        {
+            var point = _context.Get<Point>(x => x.PointId == id);
+
+            point.Status = true;
+            point.GetTime = DateTime.Now.ToShortDateString();
+            point.Deadline = DateTime.Now.AddDays(point.ValidDate).ToShortDateString();
+
+            var members = _context.GetAll<Member>().Select(x=>x.MemberId);
+
+            foreach (var item in members)
+            {
+                var result = new PointOwner
+                {
+                    MemberId = item,
+                    PointId = point.PointId
+                };
+                _context.Create<PointOwner>(result);
+            }
+
+            _context.Update<Point>(point);
+            _context.SaveChanges();
+
+            return point;
         }
         public List<Ticket> GetTicket()
         {
