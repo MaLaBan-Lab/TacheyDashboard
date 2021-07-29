@@ -33,6 +33,7 @@ namespace TacheyDashboard
             services.AddDbContext<TacheyContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("TacheyContext")));
             services.AddTransient<OrderInterface, OrdersService>();
+            services.AddTransient<MemberInterface, MembersService>();
 
             string connectionString = Configuration.GetConnectionString("TacheyContext");
             services.AddDbContext<AppDBContext>(c => c.UseSqlServer(connectionString));
