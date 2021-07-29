@@ -796,11 +796,11 @@ namespace TacheyDashboard.Models
                     .HasComment("積分編號");
 
                 entity.Property(e => e.Deadline)
-                    .HasColumnType("datetime")
+                    .HasMaxLength(30)
                     .HasComment("有效期限");
 
                 entity.Property(e => e.GetTime)
-                    .HasColumnType("datetime")
+                    .HasMaxLength(30)
                     .HasComment("取得日期");
 
                 entity.Property(e => e.MemberId)
@@ -907,6 +907,8 @@ namespace TacheyDashboard.Models
                 entity.Property(e => e.PayMethod).HasMaxLength(50);
 
                 entity.Property(e => e.ProductType).HasMaxLength(50);
+
+                entity.Property(e => e.Send).HasMaxLength(50);
 
                 entity.Property(e => e.TicketName).HasMaxLength(128);
 

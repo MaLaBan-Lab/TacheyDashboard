@@ -70,8 +70,8 @@ namespace TacheyDashboard.Service
                 PointNum = value.PointNum,
                 ValidDate = value.ValidDate,
                 Status = false,
-                GetTime = DateTime.Now,
-                Deadline = DateTime.Now.AddDays((double)value.ValidDate)
+                //GetTime = DateTime.Now,
+                //Deadline = DateTime.Now.AddDays((double)value.ValidDate)
             };
 
             _context.Create<Point>(newPoint);
