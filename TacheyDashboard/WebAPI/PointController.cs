@@ -101,18 +101,18 @@ namespace TacheyDashboard.WebAPI
         /// 刪除積分券
         /// </summary>
         /// <param name="id"></param>
-        //[HttpDelete("{id}")]
-        //public ApiResult Delete(int id)
-        //{
-        //    try
-        //    {
-        //        var result = _ordersService.UpdatePoint(id);
-        //        return new ApiResult(ApiStatus.Success, string.Empty, result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new ApiResult(ApiStatus.Fail, ex.Message, null);
-        //    }
-        //}
+        [HttpDelete("{id}")]
+        public ApiResult Delete(int id)
+        {
+            try
+            {
+                var result = _ordersService.GetPoint();
+                return new ApiResult(ApiStatus.Success, string.Empty, result);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult(ApiStatus.Fail, ex.Message, null);
+            }
+        }
     }
 }

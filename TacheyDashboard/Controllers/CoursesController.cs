@@ -10,7 +10,6 @@ using System.Web.Helpers;
 using TacheyDashboard.Models;
 using TacheyDashboard.Service;
 using TacheyDashboard.ViewModel.Courses;
-using Newtonsoft.Json;
 
 namespace TacheyDashboard.Controllers
 {
