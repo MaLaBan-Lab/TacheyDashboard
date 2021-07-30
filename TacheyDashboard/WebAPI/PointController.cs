@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using TacheyDashboard.Interface;
 using TacheyDashboard.ViewModel.ApiModel;
 using TacheyDashboard.Models;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TacheyDashboard.WebAPI
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class PointController : ControllerBase
