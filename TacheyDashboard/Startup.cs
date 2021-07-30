@@ -14,6 +14,7 @@ using Tachey001.Repository;
 using TacheyDashboard.Models;
 using TacheyDashboard.Interface;
 using TacheyDashboard.Service;
+using TacheyDashboard.Helpers;
 
 namespace TacheyDashboard
 {  
@@ -38,6 +39,7 @@ namespace TacheyDashboard
             services.AddDbContext<AppDBContext>(c => c.UseSqlServer(connectionString));
 
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDBContext>();
+            services.AddSingleton<JwtHelper>();
 
             services.AddScoped<TacheyRepository>();
             services.AddScoped<CoursesService>();

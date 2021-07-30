@@ -20,6 +20,7 @@ namespace TacheyDashboard.WebAPI
         {
             _ordersService = orderservice;
         }
+
         /// <summary>
         /// 取得積分資料
         /// </summary>
@@ -37,6 +38,7 @@ namespace TacheyDashboard.WebAPI
                 return new ApiResult(ApiStatus.Fail, ex.Message, null);
             }
         }
+
         /// <summary>
         /// 編輯 積分券
         /// </summary>
@@ -55,6 +57,7 @@ namespace TacheyDashboard.WebAPI
                 return new ApiResult(ApiStatus.Fail, ex.Message, null);
             }
         }
+
         /// <summary>
         /// 新增積分
         /// </summary>
@@ -73,8 +76,9 @@ namespace TacheyDashboard.WebAPI
                 return new ApiResult(ApiStatus.Fail, ex.Message, null);
             }
         }
+
         /// <summary>
-        /// 更新發送積分券
+        /// 發送積分券
         /// </summary>
         /// <param name="id"></param>
         [HttpPatch("{id}")]
@@ -90,6 +94,7 @@ namespace TacheyDashboard.WebAPI
                 return new ApiResult(ApiStatus.Fail, ex.Message, null);
             }
         }
+
         /// <summary>
         /// 刪除積分券
         /// </summary>
