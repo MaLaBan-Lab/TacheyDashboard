@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Product";
+    ViewData["Title"] = "課程產品管理";
 }
 @section topCss{
     <!-- Load required Bootstrap and BootstrapVue CSS -->
@@ -53,7 +53,7 @@
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
 }
 
-<h1 class="m-2">課程管理</h1>
+<h1 class="m-2">課程產品管理</h1>
 
 <div id="app" v-cloak>
     <b-container fluid>
@@ -253,10 +253,8 @@
                 fields: [
                     { key: 'CourseId', label: '課程Id', sortable: false, },
                     { key: 'Title', label: '課程標題', sortable: false,  },
-                    //{ key: 'TitlePageImageURL', label: '封面圖片', sortable: false, class: "col-2" },
                     { key: 'OriginalPrice', label: '原價', sortable: true, sortDirection: 'desc',  },
                     { key: 'TotalMinTime', label: '課程長度', sortable: true, sortDirection: 'desc',},
-                    //{ key: 'MemberId', label: '開課會員Id', sortable: false, class: "col-2"},
                     { key: 'CategoryName', label: '類別', sortable: true, sortDirection: 'desc', },
                     { key: 'MainClick', label: '點擊數', sortable: true, sortDirection: 'desc', },
                     { key: 'CreateVerify', label: '狀態', sortable: true, sortDirection: 'desc', },
@@ -305,7 +303,6 @@
                     this.infoModal.CoursePerson = `適合的族群 : ${item.CoursePerson}`
                     this.infoModal.OriginalPrice = `定價 : ${item.OriginalPrice}`
                     this.infoModal.TotalMinTime = `課程總長度 : ${item.TotalMinTime}`
-                    //this.infoModal.MemberId = `開課會員編號 : ${item.MemberId}`
                     this.infoModal.LecturerIdentity = `開課會員身份 : ${item.LecturerIdentity}`
                     this.infoModal.CategoryName = `分類 : ${item.CategoryName}`
                     this.infoModal.DetailName = `細項 : ${item.DetailName}`
