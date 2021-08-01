@@ -51,18 +51,22 @@ $.ajax({
         //    list.push({ item: item.id },);
         //});
         //let test = Newtonsoft.Json.JsonConvert.SerializeObject(data);
-        new Vue({
-            el: '#app',
-            data: {
-                items: [
-                    { '排名': 1, '課程名稱': data[0].id, '銷售數': data[0].count },
-                    { '排名': 2, '課程名稱': data[1].id, '銷售數': data[1].count },
-                    { '排名': 3, '課程名稱': data[2].id, '銷售數': data[2].count },
-                    { '排名': 4, '課程名稱': data[3].id, '銷售數': data[3].count },
-                    { '排名': 5, '課程名稱': data[4].id, '銷售數': data[4].count }
-                ]
-            }
-        })
+        console.log('data:')
+        console.log(data)
+        //new Vue({
+        //    el: '#app',
+        //    data() {
+        //        return {
+        //            items: [
+        //                { '排名': 1, '課程名稱': data[0].id, '銷售數': data[0].count },
+        //                { '排名': 2, '課程名稱': data[1].id, '銷售數': data[1].count },
+        //                { '排名': 3, '課程名稱': data[2].id, '銷售數': data[2].count },
+        //                { '排名': 4, '課程名稱': data[3].id, '銷售數': data[3].count },
+        //                { '排名': 5, '課程名稱': data[4].id, '銷售數': data[4].count }
+        //            ]
+        //        }
+        //    }
+        //})
     },
     error: function (data) {
         console.log(data);
