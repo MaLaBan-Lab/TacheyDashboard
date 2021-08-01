@@ -46,11 +46,6 @@ namespace TacheyDashboard.Controllers
 
         }
 
-        public IActionResult Application()
-        {
-            return View();
-        }
-
         public IActionResult CourseCategory()
         {
             var resultData = _coursesService.GetAllCourseCategory();

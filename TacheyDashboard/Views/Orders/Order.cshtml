@@ -3,8 +3,8 @@
     ViewData["Title"] = "訂單管理";
 }
 
-<h1>訂單管理頁面</h1>
 <div id="app">
+    <h2><b-badge variant="secondary">訂單管理</b-badge></h2>
     <b-container fluid>
         <!-- User Interface controls -->
         <b-row>
@@ -36,7 +36,7 @@
                 </b-form-group>
             </b-col>
 
-           
+
 
         </b-row>
 
@@ -44,7 +44,7 @@
         <b-table :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter"
                  :filter-included-fields="filterOn" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"
                  :sort-direction="sortDirection" stacked="md" show-empty small v-on:filtered="onFiltered">
-         
+
 
             <template #cell(actions)="row">
                 <b-button size="sm" v-on:click="info(row.item, row.index, $event.target)" class="mr-1">
