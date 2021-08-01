@@ -16,6 +16,7 @@ using TacheyDashboard.Interface;
 using TacheyDashboard.Service;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using TacheyDashboard.Helpers;
 
 namespace TacheyDashboard
 {  
@@ -42,6 +43,7 @@ namespace TacheyDashboard
             services.AddDbContext<AppDBContext>(c => c.UseSqlServer(connectionString));
 
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDBContext>();
+            services.AddSingleton<JwtHelper>();
 
             services.AddScoped<TacheyRepository>();
             services.AddScoped<CoursesService>();

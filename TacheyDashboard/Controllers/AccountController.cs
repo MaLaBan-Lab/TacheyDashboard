@@ -5,19 +5,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TacheyDashboard.Helpers;
 using TacheyDashboard.ViewModel.Account;
 
 namespace TacheyDashboard.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly JwtHelper _jwt;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, JwtHelper jwt)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _jwt = jwt;
         }
 
         [HttpGet]
@@ -26,7 +29,12 @@ namespace TacheyDashboard.Controllers
         {
             return View();
         }
-
+        [HttpPost]
+        [AllowAnonymous]
+        public string JwtLogin([FromBody] JwtLoginModel jwt)
+        {
+            return _jwt.GenerateToken(jwt.Email, jwt.Password);
+        }
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel user)

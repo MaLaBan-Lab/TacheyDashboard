@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using TacheyDashboard.Interface;
 using TacheyDashboard.ViewModel.ApiModel;
 using TacheyDashboard.Models;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TacheyDashboard.WebAPI
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class PointController : ControllerBase
@@ -20,6 +22,7 @@ namespace TacheyDashboard.WebAPI
         {
             _ordersService = orderservice;
         }
+
         /// <summary>
         /// 取得積分資料
         /// </summary>
@@ -37,6 +40,7 @@ namespace TacheyDashboard.WebAPI
                 return new ApiResult(ApiStatus.Fail, ex.Message, null);
             }
         }
+
         /// <summary>
         /// 編輯 積分券
         /// </summary>
@@ -55,6 +59,7 @@ namespace TacheyDashboard.WebAPI
                 return new ApiResult(ApiStatus.Fail, ex.Message, null);
             }
         }
+
         /// <summary>
         /// 新增積分
         /// </summary>
@@ -73,8 +78,9 @@ namespace TacheyDashboard.WebAPI
                 return new ApiResult(ApiStatus.Fail, ex.Message, null);
             }
         }
+
         /// <summary>
-        /// 更新發送積分券
+        /// 發送積分券
         /// </summary>
         /// <param name="id"></param>
         [HttpPatch("{id}")]
@@ -90,22 +96,23 @@ namespace TacheyDashboard.WebAPI
                 return new ApiResult(ApiStatus.Fail, ex.Message, null);
             }
         }
+
         /// <summary>
         /// 刪除積分券
         /// </summary>
         /// <param name="id"></param>
-        //[HttpDelete("{id}")]
-        //public ApiResult Delete(int id)
-        //{
-        //    try
-        //    {
-        //        var result = _ordersService.UpdatePoint(id);
-        //        return new ApiResult(ApiStatus.Success, string.Empty, result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new ApiResult(ApiStatus.Fail, ex.Message, null);
-        //    }
-        //}
+        [HttpDelete("{id}")]
+        public ApiResult Delete(int id)
+        {
+            try
+            {
+                var result = _ordersService.GetPoint();
+                return new ApiResult(ApiStatus.Success, string.Empty, result);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult(ApiStatus.Fail, ex.Message, null);
+            }
+        }
     }
 }

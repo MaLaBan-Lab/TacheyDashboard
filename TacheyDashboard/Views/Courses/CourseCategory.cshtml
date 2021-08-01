@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "CourseCategory";
+    ViewData["Title"] = "課程分類管理";
 }
 @section topCSS {
     <!-- Load required Bootstrap and BootstrapVue CSS -->
@@ -40,10 +40,8 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>*@
 }
 
-
-<h1>課程種類管理</h1>
-
 <div id="app">
+    <h2><b-badge variant="secondary">課程種類管理</b-badge></h2>
     <div class="mb-5" role="group" aria-label="Basic example" style="text-align: right;">
         <b-button class="btn btn-warning mr-1" @*v-on:click="add" ref="btnShow"*@ v-b-modal.category-modal>新增</b-button>
         @*<b-button class="btn btn-secondary mr-1" v-on:click="replace">Replace</b-button>*@

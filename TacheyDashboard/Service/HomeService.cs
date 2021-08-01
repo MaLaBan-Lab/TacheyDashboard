@@ -73,8 +73,8 @@ namespace TacheyDashboard.Service
 
         public List<OrderRecordSuccess> GetAllOrderData()
         {
-            var orderDetail = _tacheyRepository.GetAll<Models.OrderDetail>();
-            var order = _tacheyRepository.GetAll<Models.Order>();
+            var orderDetail = _tacheyRepository.GetAll<OrderDetail>();
+            var order = _tacheyRepository.GetAll<Order>();
 
             var result = from od in orderDetail
                             join o in order on od.OrderId equals o.OrderId
@@ -186,7 +186,7 @@ namespace TacheyDashboard.Service
             DateTime LastDay = DateTime.Now.AddMonths(1).AddDays(-DateTime.Now.AddMonths(1).Day); // 本月底
 
             var AnsAmount = (from o in orders
-                             where o.OrderDate >= FirstDay && o.OrderDate <= LastDay
+                             //where o.OrderDate >= FirstDay && o.OrderDate <= LastDay
                              group o by new { o.CourseId, o.CourseName } into g
                              orderby g.Count() descending
                              select new { id = g.Key.CourseName, count = g.Count() }).Take(5).ToList();

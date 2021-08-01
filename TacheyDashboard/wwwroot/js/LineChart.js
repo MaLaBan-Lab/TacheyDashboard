@@ -3,7 +3,6 @@
         url: url,
         method: "POST",
         success: function (data) {
-            console.log(data);
             var id = [];
             var amount = [];
 
@@ -81,7 +80,6 @@
             });
         },
         error: function (data) {
-            console.log(data);
         }
     });
 }

@@ -10,7 +10,6 @@ using System.Web.Helpers;
 using TacheyDashboard.Models;
 using TacheyDashboard.Service;
 using TacheyDashboard.ViewModel.Courses;
-using Newtonsoft.Json;
 
 namespace TacheyDashboard.Controllers
 {
@@ -45,11 +44,6 @@ namespace TacheyDashboard.Controllers
 
             return Redirect("Product");
 
-        }
-
-        public IActionResult Application()
-        {
-            return View();
         }
 
         public IActionResult CourseCategory()

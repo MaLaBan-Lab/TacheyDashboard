@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TacheyDashboard</title>
+    <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
@@ -42,7 +42,7 @@
             </nav>*@
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="#">Tachey</a>
+            <a class="navbar-brand ps-3" href="/home/index">Tachey - 後台管理</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
@@ -126,10 +126,10 @@
                                         <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
                                         課程產品管理
                                     </a>
-                                    <a class="nav-link" href="@Url.Action("Application", "Courses")">
+                                    @*<a class="nav-link" href="@Url.Action("Application", "Courses")">
                                         <div class="sb-nav-link-icon"><i class="fas fa-cart-plus"></i></div>
                                         課程上架申請管理
-                                    </a>
+                                    </a>*@
                                     <a class="nav-link" href="@Url.Action("CourseCategory", "Courses")">
                                         <div class="sb-nav-link-icon"><i class="fas fa-archive"></i></div>
                                         課程種類管理
