@@ -21,7 +21,7 @@ namespace TacheyDashboard.Controllers
     {
         private readonly OrderInterface _ordersService;
         private readonly TacheyContext _context;
-
+       
 
         public OrdersController(OrderInterface orderservice,TacheyContext context)
         {
@@ -30,6 +30,7 @@ namespace TacheyDashboard.Controllers
         }
         public IActionResult Point()
         {
+
             var result= _ordersService.GetPoint();
             string jsonString = JsonConvert.SerializeObject(result);
             ViewBag.jsonString = jsonString;
@@ -50,7 +51,7 @@ namespace TacheyDashboard.Controllers
                     TicketName = item.TicketName,
                     TicketStatus = item.TicketStatus,
                     Discount = item.Discount,
-                    Ticketdate = item.Ticketdate.ToString().Remove(10),
+                    Ticketdate = item.Ticketdate?.ToString("yyyy-MM-dd"),
                     PayMethod = item.PayMethod,
                     ProductType = item.ProductType,
                     UseTime = item.UseTime,
@@ -84,26 +85,50 @@ namespace TacheyDashboard.Controllers
             var result = _ordersService.GetTicket();
             foreach (var item in result)
             {
-               
-                returnData.Add(new TicketViewModel {
-                    TicketId = item.TicketId,
-                    TicketName = item.TicketName,
-                    TicketStatus = item.TicketStatus,
-                    Discount=item.Discount,
-                    Ticketdate = item.Ticketdate.ToString().Remove(10),
-                    PayMethod=item.PayMethod,
-                    ProductType=item.ProductType,
-                    UseTime=item.UseTime,
-                    Send=item.Send
-            });
-               
+                if (item.SendDate != null)
+                {
+                    returnData.Add(new TicketViewModel {
+                        TicketId = item.TicketId,
+                        TicketName = item.TicketName,
+                        TicketStatus = item.TicketStatus,
+                        Discount = item.Discount,
+                        Ticketdate = item.Ticketdate?.ToString("yyyy-MM-dd"),
+                        PayMethod = item.PayMethod,
+                        ProductType = item.ProductType,
+                        UseTime = item.UseTime,
+                        Send = item.Send,
+                        SendDate = item.SendDate?.ToString("yyyy-MM-dd")
+                    });
+                    
+                 }
+                else
+                {
+                    returnData.Add(new TicketViewModel
+                    {
+                        TicketId = item.TicketId,
+                        TicketName = item.TicketName,
+                        TicketStatus = item.TicketStatus,
+                        Discount = item.Discount,
+                        Ticketdate = item.Ticketdate?.ToString("yyyy-MM-dd"),
+                        PayMethod = item.PayMethod,
+                        ProductType = item.ProductType,
+                        UseTime = item.UseTime,
+                        Send = item.Send
+                    });
+                }
+
+
             }
             string jsonString = JsonConvert.SerializeObject(returnData);
             return jsonString;
         }
-        [HttpPost]
+        [HttpPatch]
         public void SendInvite(string ticketid)
         {
+            var sendticket = _context.Tickets.Find(ticketid);
+            sendticket.Send = "true";
+            sendticket.SendDate= DateTime.Now;
+            _context.SaveChanges();
             _ordersService.SendTicket(ticketid);
         }
 
@@ -113,6 +138,23 @@ namespace TacheyDashboard.Controllers
             if (ModelState.IsValid)
             {
                 _context.Tickets.Add(ticket);
+                _context.SaveChanges();
+                return RedirectToAction("Invite");
+            }
+
+            return View(ticket);
+        }
+        [HttpPut]
+        public IActionResult Update([FromBody] Ticket ticket)
+        {
+            if (ModelState.IsValid)
+            {
+                var t1 = _context.Tickets.Find(ticket.TicketId);
+                t1.Discount = ticket.Discount;
+                t1.Ticketdate = ticket.Ticketdate;
+                t1.PayMethod = ticket.PayMethod;
+                t1.ProductType = ticket.ProductType;
+                t1.UseTime = ticket.UseTime;
                 _context.SaveChanges();
                 return RedirectToAction("Invite");
             }

@@ -288,6 +288,7 @@
                     this.infoModalEdit.title = `編輯 ${item.pointId}號-積分券`
                     this.infoModalEdit.content = `確定編輯${item.pointId}號積分券?`
                     this.$root.$emit('bv::show::modal', this.infoModalEdit.id, button)
+                   
                     this.UpdateForm = {
                         pointId: item.pointId,
                         pointName: item.pointName,
@@ -354,6 +355,7 @@
                         pointNum: parseInt(this.UpdateForm.pointNum),
                         validDate: parseInt(this.UpdateForm.validDate)
                     }
+                    console.warn(result)
                     axios.put('https://localhost:44363/api/Point', result).then(res => {
                         var index = this.unPoints.findIndex(item => item.pointId == result.pointId)
                         this.unPoints[index].pointName = result.pointName
