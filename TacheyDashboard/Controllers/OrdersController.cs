@@ -135,6 +135,16 @@ namespace TacheyDashboard.Controllers
         [HttpPost]
         public  IActionResult Create([FromBody] Ticket ticket)
         {
+            Random rnd = new Random();
+            ticket.TicketId = "Ticket"+ rnd.Next(100, 1000);
+
+            var hasornot = _context.Tickets.Find(ticket.TicketId);
+            while (hasornot != null)
+            {
+                ticket.TicketId = "Ticket" + rnd.Next(100, 1000);
+                hasornot = _context.Tickets.Find(ticket.TicketId);
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Tickets.Add(ticket);
