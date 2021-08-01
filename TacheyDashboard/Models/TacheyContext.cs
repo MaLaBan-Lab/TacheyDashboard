@@ -908,6 +908,8 @@ namespace TacheyDashboard.Models
 
                 entity.Property(e => e.ProductType).HasMaxLength(50);
 
+                entity.Property(e => e.Send).HasMaxLength(50);
+
                 entity.Property(e => e.TicketName).HasMaxLength(128);
 
                 entity.Property(e => e.TicketStatus).HasMaxLength(128);

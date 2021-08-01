@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
@@ -14,7 +14,8 @@ using Tachey001.Repository;
 using TacheyDashboard.Models;
 using TacheyDashboard.Interface;
 using TacheyDashboard.Service;
-using TacheyDashboard.Helpers;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace TacheyDashboard
 {  
@@ -30,6 +31,7 @@ namespace TacheyDashboard
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddControllersWithViews();
             services.AddDbContext<TacheyContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("TacheyContext")));
@@ -45,6 +47,8 @@ namespace TacheyDashboard
             services.AddScoped<TacheyRepository>();
             services.AddScoped<CoursesService>();
             services.AddScoped<HomeService>();
+           
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

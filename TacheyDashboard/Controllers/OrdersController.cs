@@ -39,7 +39,25 @@ namespace TacheyDashboard.Controllers
         public IActionResult Invite()
         {
             var result = _ordersService.GetTicket();
-            string jsonString = JsonConvert.SerializeObject(result);
+            List<TicketViewModel> returnData = new List<TicketViewModel>();
+           
+            foreach (var item in result)
+            {
+
+                returnData.Add(new TicketViewModel
+                {
+                    TicketId = item.TicketId,
+                    TicketName = item.TicketName,
+                    TicketStatus = item.TicketStatus,
+                    Discount = item.Discount,
+                    Ticketdate = item.Ticketdate.ToString().Remove(10),
+                    PayMethod = item.PayMethod,
+                    ProductType = item.ProductType,
+                    UseTime = item.UseTime,
+                    Send = item.Send
+                });
+            }
+                string jsonString = JsonConvert.SerializeObject(returnData);
             ViewBag.jsonString = jsonString;
             return View();
         }
@@ -59,26 +77,43 @@ namespace TacheyDashboard.Controllers
             string jsonString = JsonConvert.SerializeObject(result);
             return jsonString;
         }
+        [HttpGet]
+        public dynamic TicketData()
+        {
+            List<TicketViewModel> returnData = new List<TicketViewModel>();
+            var result = _ordersService.GetTicket();
+            foreach (var item in result)
+            {
+               
+                returnData.Add(new TicketViewModel {
+                    TicketId = item.TicketId,
+                    TicketName = item.TicketName,
+                    TicketStatus = item.TicketStatus,
+                    Discount=item.Discount,
+                    Ticketdate = item.Ticketdate.ToString().Remove(10),
+                    PayMethod=item.PayMethod,
+                    ProductType=item.ProductType,
+                    UseTime=item.UseTime,
+                    Send=item.Send
+            });
+               
+            }
+            string jsonString = JsonConvert.SerializeObject(returnData);
+            return jsonString;
+        }
         [HttpPost]
         public void SendInvite(string ticketid)
         {
             _ordersService.SendTicket(ticketid);
         }
 
-        public IActionResult Create()
-        {
-            return View();
-        }
-
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TicketId,TicketName,TicketStatus,Discount,Ticketdate,PayMethod,ProductType,UseTime")]
-        Ticket ticket)
+        public  IActionResult Create([FromBody] Ticket ticket)
         {
             if (ModelState.IsValid)
             {
                 _context.Tickets.Add(ticket);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
                 return RedirectToAction("Invite");
             }
 
