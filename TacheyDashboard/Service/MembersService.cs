@@ -3,24 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tachey001.Repository;
+using TacheyDashboard.Interface;
 using TacheyDashboard.Models;
 using TacheyDashboard.ViewModel.Members;
 
 namespace TacheyDashboard.Service
 {
-    public class MembersService
+    public class MembersService : MemberInterface
     {
-        //跟Repository拿資料
-        private TacheyRepository _tacheyRepository;
-        //初始化資料庫邏輯
-        public MembersService()
+        ////跟Repository拿資料
+        //private TacheyRepository _tacheyRepository;
+        ////初始化資料庫邏輯
+        //public MembersService()
+        //{
+        //    _tacheyRepository = new TacheyRepository(new TacheyContext());
+        //}
+        private readonly TacheyRepository _context;
+        public MembersService(TacheyRepository context)
         {
-            _tacheyRepository = new TacheyRepository(new TacheyContext());
+            _context = context;
         }
 
-        public List<MemberViewModel> GetAllMemberData(string MemberId)
+        public List<MemberViewModel> GetAllMemberData()
         {
-            var member = _tacheyRepository.GetAll<Models.Member>(x => x.MemberId == MemberId);
+            var member = _context.GetAll<Member>();
 
             var result = from m in member
                          select new MemberViewModel
