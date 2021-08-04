@@ -329,7 +329,7 @@
                 }
             },
             mounted() {
-                axios.get('https://localhost:44363/api/Point')
+                axios.get('/api/Point')
                     .then((res) => {
                         this.isBusy = !this.isBusy
                         res.data.result.forEach((item) => {
@@ -390,7 +390,7 @@
                     this.infoModal.content = ''
                 },
                 sendPoint(id) {
-                    axios.patch(`https://localhost:44363/api/Point/${id}`)
+                    axios.patch(`/api/Point/${id}`)
                         .then((res) => {
                             var result = this.unPoints.find((item) => {
                                 return item.pointId == id
@@ -410,7 +410,7 @@
                         })
                 },
                 postPoint() {
-                    axios.post('https://localhost:44363/api/Point', {
+                    axios.post('/api/Point', {
                         pointName: this.PointForm.pointName,
                         pointNum: parseInt(this.PointForm.pointNum),
                         validDate: parseInt(this.PointForm.validDate)
@@ -438,7 +438,7 @@
                         pointNum: parseInt(this.UpdateForm.pointNum),
                         validDate: parseInt(this.UpdateForm.validDate)
                     }
-                    axios.put('https://localhost:44363/api/Point', result).then(res => {
+                    axios.put('/api/Point', result).then(res => {
                         var index = this.unPoints.findIndex(item => item.pointId == result.pointId)
                         this.unPoints[index].pointName = result.pointName
                         this.unPoints[index].pointNum = result.pointNum
@@ -446,7 +446,7 @@
                     })
                 },
                 deletePoint(id) {
-                    axios.delete(`https://localhost:44363/api/Point/${id}`)
+                    axios.delete(`/api/Point/${id}`)
                         .then(res => {
 
                         })
