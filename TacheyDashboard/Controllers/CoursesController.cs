@@ -35,6 +35,12 @@ namespace TacheyDashboard.Controllers
 
             ViewBag.Labels = Jsonresult;
 
+            var categoryName = _coursesService.GetAllCourseCategory();
+
+            string Nameresult = JsonConvert.SerializeObject(categoryName);
+
+            ViewBag.categoryName = Nameresult;
+
             return View();
         }
 
