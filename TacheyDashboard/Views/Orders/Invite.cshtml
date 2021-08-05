@@ -214,6 +214,13 @@
                
             },
             methods: {
+                makeToast(variant = null) {
+                    this.$bvToast.toast('Toast body content', {
+                        title: `Variant ${variant || 'default'}`,
+                        variant: variant,
+                        solid: true
+                    })
+                },
                 info(item, index, button) {
                     this.infoModal.title = `${item.TicketId}號-折扣券`
                     this.infoModal.content = `確定發送${item.TicketId}號折扣券?`

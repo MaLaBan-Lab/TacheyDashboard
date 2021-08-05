@@ -4,8 +4,23 @@
 
 }
 
-<div class="" id="app">
+<div class="position-relative" id="app">
+    <!-- Toast -->
+    <div class="position-absolute p-3 top-0 start-50 translate-middle-x" style="z-index: 11">
+        <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
+            <div class="toast-header">
+                <strong class="me-auto">提醒訊息</strong>
+                <small></small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <h4 class="text-success"><i class="fas fa-check-circle"></i> 儲存成功</h4>
+            </div>
+        </div>
+    </div>
+
     <h2><b-badge variant="secondary">積分管理</b-badge></h2>
+
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item w-50 text-center" role="presentation">
             <a class="nav-link active fs-4 fw-bold" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
@@ -260,6 +275,13 @@
 
 @section endJS{
     <script>
+
+        function toastMsg() {
+            var myAlert = document.getElementById('liveToast');//select id of toast
+            var bsAlert = new bootstrap.Toast(myAlert);//inizialize it
+            bsAlert.show();//show it
+        }
+
         let app = new Vue({
             el: '#app',
             data() {
@@ -269,7 +291,7 @@
                     fixed: true,
                     filter: '',
                     unFilter: '',
-                    filterOn: ['pointId', 'pointName', 'pointNum','validDate'],
+                    filterOn: ['pointId', 'pointName', 'pointNum', 'validDate'],
                     pageOptions: [5, 10, 15],
                     unpageOptions: [5, 10, 15],
                     totalRows: 1,
@@ -407,6 +429,7 @@
                             });
                             this.totalRows = this.Points.length
                             this.untotalRows = this.unPoints.length
+                            toastMsg()
                         })
                 },
                 postPoint() {
@@ -429,6 +452,7 @@
                         }
                         this.totalRows = this.Points.length
                         this.untotalRows = this.unPoints.length
+                        toastMsg()
                     })
                 },
                 updatePoint() {
@@ -443,6 +467,7 @@
                         this.unPoints[index].pointName = result.pointName
                         this.unPoints[index].pointNum = result.pointNum
                         this.unPoints[index].validDate = result.validDate
+                        toastMsg()
                     })
                 },
                 deletePoint(id) {
