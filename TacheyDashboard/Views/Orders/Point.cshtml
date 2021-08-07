@@ -4,8 +4,23 @@
 
 }
 
-<div class="" id="app">
+<div class="position-relative" id="app">
+    <!-- Toast -->
+    <div class="position-absolute p-3 top-0 start-50 translate-middle-x" style="z-index: 11">
+        <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
+            <div class="toast-header">
+                <strong class="me-auto">提醒訊息</strong>
+                <small></small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <h4 class="text-success"><i class="fas fa-check-circle"></i> 儲存成功</h4>
+            </div>
+        </div>
+    </div>
+
     <h2><b-badge variant="secondary">積分管理</b-badge></h2>
+
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item w-50 text-center" role="presentation">
             <a class="nav-link active fs-4 fw-bold" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
@@ -260,6 +275,13 @@
 
 @section endJS{
     <script>
+
+        function toastMsg() {
+            var myAlert = document.getElementById('liveToast');//select id of toast
+            var bsAlert = new bootstrap.Toast(myAlert);//inizialize it
+            bsAlert.show();//show it
+        }
+
         let app = new Vue({
             el: '#app',
             data() {
@@ -269,7 +291,7 @@
                     fixed: true,
                     filter: '',
                     unFilter: '',
-                    filterOn: ['pointName'],
+                    filterOn: ['pointId', 'pointName', 'pointNum', 'validDate'],
                     pageOptions: [5, 10, 15],
                     unpageOptions: [5, 10, 15],
                     totalRows: 1,
@@ -329,7 +351,7 @@
                 }
             },
             mounted() {
-                axios.get('https://localhost:44363/api/Point')
+                axios.get('/api/Point')
                     .then((res) => {
                         this.isBusy = !this.isBusy
                         res.data.result.forEach((item) => {
@@ -391,7 +413,7 @@
                     this.infoModal.content = ''
                 },
                 sendPoint(id) {
-                    axios.patch(`https://localhost:44363/api/Point/${id}`)
+                    axios.patch(`/api/Point/${id}`)
                         .then((res) => {
                             var result = this.unPoints.find((item) => {
                                 return item.pointId == id
@@ -408,10 +430,11 @@
                             });
                             this.totalRows = this.Points.length
                             this.untotalRows = this.unPoints.length
+                            toastMsg()
                         })
                 },
                 postPoint() {
-                    axios.post('https://localhost:44363/api/Point', {
+                    axios.post('/api/Point', {
                         pointName: this.PointForm.pointName,
                         pointNum: parseInt(this.PointForm.pointNum),
                         validDate: parseInt(this.PointForm.validDate)
@@ -430,6 +453,7 @@
                         }
                         this.totalRows = this.Points.length
                         this.untotalRows = this.unPoints.length
+                        toastMsg()
                     })
                 },
                 updatePoint() {
@@ -439,16 +463,16 @@
                         pointNum: parseInt(this.UpdateForm.pointNum),
                         validDate: parseInt(this.UpdateForm.validDate)
                     }
-                    console.warn(result)
-                    axios.put('https://localhost:44363/api/Point', result).then(res => {
+                    axios.put('/api/Point', result).then(res => {
                         var index = this.unPoints.findIndex(item => item.pointId == result.pointId)
                         this.unPoints[index].pointName = result.pointName
                         this.unPoints[index].pointNum = result.pointNum
                         this.unPoints[index].validDate = result.validDate
+                        toastMsg()
                     })
                 },
                 deletePoint(id) {
-                    axios.delete(`https://localhost:44363/api/Point/${id}`)
+                    axios.delete(`/api/Point/${id}`)
                         .then(res => {
 
                         })
