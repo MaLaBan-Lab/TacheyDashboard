@@ -394,6 +394,7 @@
                     this.infoModalEdit.title = `編輯 ${item.pointId}號-積分券`
                     this.infoModalEdit.content = `確定編輯${item.pointId}號積分券?`
                     this.$root.$emit('bv::show::modal', this.infoModalEdit.id, button)
+                   
                     this.UpdateForm = {
                         pointId: item.pointId,
                         pointName: item.pointName,

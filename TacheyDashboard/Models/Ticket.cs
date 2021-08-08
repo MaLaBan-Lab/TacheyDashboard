@@ -16,5 +16,6 @@ namespace TacheyDashboard.Models
         public string ProductType { get; set; }
         public string UseTime { get; set; }
         public string Send { get; set; }
+        public DateTime? SendDate { get; set; }
     }
 }
